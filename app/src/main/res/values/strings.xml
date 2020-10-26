@@ -1,0 +1,10 @@
+<resources>
+    <string name="app_name">GitPhone</string>
+
+<!--    Edit text -->
+    <string name="text_field_hint_username">Git username</string>
+
+<!--    Button-->
+    <string name="btn_fetch_repo">Fetch repositories</string>
+
+</resources>
