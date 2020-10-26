@@ -6,19 +6,18 @@ import com.stefanenko.gitphone.ui.activity.main.MainViewModel
 import dagger.BindsInstance
 import dagger.Component
 import dagger.android.AndroidInjectionModule
+import dagger.android.support.AndroidSupportInjectionModule
 import javax.inject.Singleton
 
 @Singleton
-@Component(modules = [AndroidInjectionModule::class, AppModule::class, ViewModelModule::class, DataModule::class])
+@Component(modules = [
+    AndroidInjectionModule::class,
+    AppModule::class,
+    ViewModelModule::class,
+    DataModule::class,
+    FragmentModule::class
+])
 interface AppComponent {
 
-    fun inject(viewModel: MainViewModel)
     fun inject(app: App)
-
-    @Component.Builder
-    interface Builder {
-        fun build(): AppComponent
-        @BindsInstance
-        fun application(app: Application): Builder
-    }
 }
