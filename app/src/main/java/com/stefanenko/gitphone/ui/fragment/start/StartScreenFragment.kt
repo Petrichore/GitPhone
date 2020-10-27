@@ -1,16 +1,17 @@
 package com.stefanenko.gitphone.ui.fragment.start
 
-import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
+import androidx.navigation.fragment.findNavController
 import com.stefanenko.gitphone.R
+import com.stefanenko.gitphone.data.localData.ParcelableGitRepositoryList
 import com.stefanenko.gitphone.ui.ViewModelFactory
-import com.stefanenko.gitphone.ui.base.BaseFragment
+import com.stefanenko.gitphone.ui.base.BaseObserveFragment
 import kotlinx.android.synthetic.main.fragment_start_screen.*
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
-class StartScreenFragment : BaseFragment() {
+class StartScreenFragment : BaseObserveFragment() {
 
     @Inject
     lateinit var viewModelFactory: ViewModelFactory
@@ -24,24 +25,39 @@ class StartScreenFragment : BaseFragment() {
     }
 
     override fun observeViewModel() {
-        viewModel.repositoryListLiveData.observe(viewLifecycleOwner, {
-            showDebugLog(it.toString())
+        viewModel.repositoryListLiveData.observe(viewLifecycleOwner, { singleEvent ->
+            if (!singleEvent.isHandled) {
+                findNavController().navigate(
+                    StartScreenFragmentDirections.actionStartScreenFragmentToRepositoryListFragment(
+                        singleEvent.getNotHandledContent()!!
+                    )
+                )
+            }else{
+                showDebugLog("Event have already handled")
+            }
         })
 
-        viewModel.validationErrorLiveData.observe(viewLifecycleOwner, {
-            showDebugLog(it)
+        viewModel.validationErrorLiveData.observe(viewLifecycleOwner, { singleEvent ->
+            if (!singleEvent.isHandled) {
+                showDebugLog(singleEvent.getNotHandledContent().toString())
+            }
         })
 
-        viewModel.loadErrorLiveData.observe(viewLifecycleOwner, {
-            showDebugLog(it)
+        viewModel.loadErrorLiveData.observe(viewLifecycleOwner, { singleEvent ->
+            if (!singleEvent.isHandled) {
+                showDebugLog(singleEvent.getNotHandledContent().toString())
+            }
         })
     }
 
     override fun setListeners() {
         fetchRepoBtn.setOnClickListener {
-            lifecycleScope.launch {
-                viewModel.fetchGitRepositoryList(usernameTextField.editText?.text.toString())
-            }
+            viewModel.fetchGitRepositoryList(usernameTextField.editText?.text.toString())
+            findNavController().navigate(
+                StartScreenFragmentDirections.actionStartScreenFragmentToRepositoryListFragment(
+                    ParcelableGitRepositoryList(emptyList())
+                )
+            )
         }
     }
 }

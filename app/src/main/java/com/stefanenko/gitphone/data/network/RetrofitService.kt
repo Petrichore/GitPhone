@@ -13,13 +13,12 @@ class RetrofitService @Inject constructor() {
     private val baseURL = "https://api.github.com"
 
     private val okHttpBuilder = OkHttpClient.Builder()
-    private val logger = HttpLoggingInterceptor()
+    private var logger = HttpLoggingInterceptor().setLevel(HttpLoggingInterceptor.Level.BODY)
 
     private val retrofit: Retrofit
 
     init {
         val client = okHttpBuilder.addInterceptor(logger).build()
-
         retrofit = Retrofit.Builder()
             .baseUrl(baseURL)
             .client(client)

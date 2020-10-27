@@ -6,8 +6,19 @@
     app:startDestination="@id/startScreenFragment">
 
     <fragment
+        android:id="@+id/repositoryListFragment"
+        android:name="com.stefanenko.gitphone.ui.fragment.repositoryList.RepositoryListFragment"
+        android:label="RepositoryListFragment" >
+        <argument
+            android:name="repositoryList"
+            app:argType="com.stefanenko.gitphone.data.localData.ParcelableGitRepositoryList" />
+    </fragment>
+    <fragment
         android:id="@+id/startScreenFragment"
-        tools:layout="@layout/fragment_start_screen"
         android:name="com.stefanenko.gitphone.ui.fragment.start.StartScreenFragment"
-        android:label="StartScreenFragment" />
+        android:label="StartScreenFragment" >
+        <action
+            android:id="@+id/action_startScreenFragment_to_repositoryListFragment"
+            app:destination="@id/repositoryListFragment" />
+    </fragment>
 </navigation>

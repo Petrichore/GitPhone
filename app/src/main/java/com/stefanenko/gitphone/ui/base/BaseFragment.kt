@@ -21,15 +21,15 @@ abstract class BaseFragment: Fragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
+        showDebugLog("onCreateView")
         val layoutId = getLayoutId()
         return inflater.inflate(layoutId, container, false)
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        showDebugLog("onViewCreated")
         setListeners()
-        initViewModel()
-        observeViewModel()
     }
 
     fun showDebugLog(message: String){
@@ -37,7 +37,5 @@ abstract class BaseFragment: Fragment() {
     }
 
     abstract fun getLayoutId(): Int
-    abstract fun initViewModel()
-    abstract fun observeViewModel()
     abstract fun setListeners()
 }

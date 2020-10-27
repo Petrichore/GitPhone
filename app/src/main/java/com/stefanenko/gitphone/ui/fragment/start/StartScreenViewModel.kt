@@ -6,45 +6,50 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.stefanenko.gitphone.data.DataLoadState
 import com.stefanenko.gitphone.data.dto.gitRepository.GitRepository
+import com.stefanenko.gitphone.data.localData.ParcelableGitRepositoryList
 import com.stefanenko.gitphone.data.repository.DataRepository
+import com.stefanenko.gitphone.ui.singleEvent.SingleEvent
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
-class StartScreenViewModel @Inject constructor(private val repository: DataRepository) : ViewModel() {
+class StartScreenViewModel @Inject constructor(private val repository: DataRepository) :
+    ViewModel() {
 
-    private val _repositoryListLiveData = MutableLiveData<List<GitRepository>>()
-    val repositoryListLiveData: LiveData<List<GitRepository>>
+    private val _repositoryListLiveData =
+        MutableLiveData<SingleEvent<ParcelableGitRepositoryList>>()
+    val repositoryListLiveData: LiveData<SingleEvent<ParcelableGitRepositoryList>>
         get() = _repositoryListLiveData
 
-    private val _validationErrorLiveData = MutableLiveData<String>()
-    val validationErrorLiveData: LiveData<String>
+    private val _validationErrorLiveData = MutableLiveData<SingleEvent<String>>()
+    val validationErrorLiveData: LiveData<SingleEvent<String>>
         get() = _validationErrorLiveData
 
-    private val _loadErrorLiveData = MutableLiveData<String>()
-    val loadErrorLiveData: LiveData<String>
+    private val _loadErrorLiveData = MutableLiveData<SingleEvent<String>>()
+    val loadErrorLiveData: LiveData<SingleEvent<String>>
         get() = _validationErrorLiveData
 
-     suspend fun fetchGitRepositoryList(username: String) {
+    fun fetchGitRepositoryList(username: String) {
         val validationResult = validateUserName(username)
-        if(validationResult){
+        if (validationResult) {
             viewModelScope.launch {
                 val dataLoadState = repository.fetchGitRepositories(username)
-                when(dataLoadState){
-                    is DataLoadState.Data->{
-                        _repositoryListLiveData.value = dataLoadState.data
+                when (dataLoadState) {
+                    is DataLoadState.Data -> {
+                        _repositoryListLiveData.value =
+                            SingleEvent(ParcelableGitRepositoryList(dataLoadState.data))
                     }
 
-                    is DataLoadState.LoadError->{
-                        _loadErrorLiveData.value = dataLoadState.error
+                    is DataLoadState.LoadError -> {
+                        _loadErrorLiveData.value = SingleEvent(dataLoadState.error)
                     }
 
-                    else->{
-                        _loadErrorLiveData.value = "No such state exception"
+                    else -> {
+                        _loadErrorLiveData.value = SingleEvent("No such state exception")
                     }
                 }
             }
-        }else{
-            _validationErrorLiveData.value = "User name can't be blank"
+        } else {
+            _validationErrorLiveData.value = SingleEvent("User name can't be blank")
         }
     }
 

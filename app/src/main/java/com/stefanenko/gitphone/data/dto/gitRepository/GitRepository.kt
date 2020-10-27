@@ -1,7 +1,10 @@
 package com.stefanenko.gitphone.data.dto.gitRepository
 
+import android.os.Parcelable
 import com.google.gson.annotations.SerializedName
+import kotlinx.android.parcel.Parcelize
 
+@Parcelize
 data class GitRepository(
     @SerializedName("name")
     val repoName: String,
@@ -20,4 +23,4 @@ data class GitRepository(
 
     @SerializedName("owner")
     val repoOwnerGit: GitRepositoryOwner
-)
+): Parcelable

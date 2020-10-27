@@ -8,4 +8,6 @@
     <color name="black">#FF000000</color>
     <color name="white">#FFFFFFFF</color>
     <color name="light_grey">#DCDCDC</color>
+    <color name="text_description_day">#7C7C7C</color>
+    <color name="card_white_color">#E8E8E8</color>
 </resources>
