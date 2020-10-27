@@ -23,6 +23,5 @@ class MainActivity: BaseActivity() {
 
     override fun initViewModel() {
         viewModel = ViewModelProvider(this)[MainViewModel::class.java]
-        Log.e("App Context", "${viewModel.appContext}")
     }
 }

@@ -8,10 +8,4 @@ import javax.inject.Inject
 
 class MainViewModel: ViewModel() {
 
-    init{
-        App.appComponent.inject(this)
-    }
-
-    @Inject
-    lateinit var appContext: Application
 }

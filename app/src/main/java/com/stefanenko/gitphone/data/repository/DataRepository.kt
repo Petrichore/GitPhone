@@ -1,7 +1,7 @@
 package com.stefanenko.gitphone.data.repository
 
 import com.stefanenko.gitphone.data.DataLoadState
-import com.stefanenko.gitphone.data.dto.gitRepository.GitRepositoryResponse
+import com.stefanenko.gitphone.data.dto.gitRepository.GitRepository
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import javax.inject.Inject
@@ -12,7 +12,7 @@ class DataRepository @Inject constructor(private val remoteRepository: RemoteDat
 
     suspend fun fetchGitRepositories(
         username: String
-    ): DataLoadState<GitRepositoryResponse> {
+    ): DataLoadState<List<GitRepository>> {
         return withContext(Dispatchers.IO) {
             return@withContext remoteRepository.fetchRepository(username)
         }

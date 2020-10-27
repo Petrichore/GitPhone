@@ -1,7 +1,7 @@
 package com.stefanenko.gitphone.data.repository
 
 import com.stefanenko.gitphone.data.DataLoadState
-import com.stefanenko.gitphone.data.dto.gitRepository.GitRepositoryResponse
+import com.stefanenko.gitphone.data.dto.gitRepository.GitRepository
 import com.stefanenko.gitphone.data.network.RetrofitService
 import com.stefanenko.gitphone.data.network.api.ApiRepository
 import retrofit2.Response
@@ -14,7 +14,7 @@ class RemoteDataService @Inject constructor(retrofitService: RetrofitService) {
 
     private val repositoryApiService = retrofitService.createService(ApiRepository::class.java)
 
-    suspend fun fetchRepository(username: String): DataLoadState<GitRepositoryResponse> {
+    suspend fun fetchRepository(username: String): DataLoadState<List<GitRepository>> {
         return try {
             val response = repositoryApiService.fetchGitRepository(username)
             return handleResponse(response)

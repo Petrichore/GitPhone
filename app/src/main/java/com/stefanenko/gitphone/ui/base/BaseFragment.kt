@@ -27,6 +27,7 @@ abstract class BaseFragment: Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        setListeners()
         initViewModel()
         observeViewModel()
     }
@@ -38,4 +39,5 @@ abstract class BaseFragment: Fragment() {
     abstract fun getLayoutId(): Int
     abstract fun initViewModel()
     abstract fun observeViewModel()
+    abstract fun setListeners()
 }

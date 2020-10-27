@@ -24,15 +24,14 @@ class StartScreenViewModel @Inject constructor(private val repository: DataRepos
     val loadErrorLiveData: LiveData<String>
         get() = _validationErrorLiveData
 
-    suspend fun fetchGitRepositoryList(username: String) {
+     suspend fun fetchGitRepositoryList(username: String) {
         val validationResult = validateUserName(username)
         if(validationResult){
             viewModelScope.launch {
                 val dataLoadState = repository.fetchGitRepositories(username)
-
                 when(dataLoadState){
                     is DataLoadState.Data->{
-                        _repositoryListLiveData.value = dataLoadState.data.repositoryList
+                        _repositoryListLiveData.value = dataLoadState.data
                     }
 
                     is DataLoadState.LoadError->{
