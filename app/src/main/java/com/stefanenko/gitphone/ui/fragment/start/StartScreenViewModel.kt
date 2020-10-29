@@ -5,8 +5,7 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.stefanenko.gitphone.data.DataLoadState
-import com.stefanenko.gitphone.data.dto.gitRepository.GitRepository
-import com.stefanenko.gitphone.data.localData.ParcelableGitRepositoryList
+import com.stefanenko.gitphone.data.localData.GitRepositoryListParcelable
 import com.stefanenko.gitphone.data.repository.DataRepository
 import com.stefanenko.gitphone.ui.singleEvent.SingleEvent
 import kotlinx.coroutines.launch
@@ -16,8 +15,8 @@ class StartScreenViewModel @Inject constructor(private val repository: DataRepos
     ViewModel() {
 
     private val _repositoryListLiveData =
-        MutableLiveData<SingleEvent<ParcelableGitRepositoryList>>()
-    val repositoryListLiveData: LiveData<SingleEvent<ParcelableGitRepositoryList>>
+        MutableLiveData<SingleEvent<GitRepositoryListParcelable>>()
+    val repositoryListLiveData: LiveData<SingleEvent<GitRepositoryListParcelable>>
         get() = _repositoryListLiveData
 
     private val _validationErrorLiveData = MutableLiveData<SingleEvent<String>>()
@@ -28,6 +27,10 @@ class StartScreenViewModel @Inject constructor(private val repository: DataRepos
     val loadErrorLiveData: LiveData<SingleEvent<String>>
         get() = _validationErrorLiveData
 
+    private val _navigateToEmptyScreen = MutableLiveData<SingleEvent<String>>()
+    val navigateToEmptyScreen: LiveData<SingleEvent<String>>
+        get() = _navigateToEmptyScreen
+
     fun fetchGitRepositoryList(username: String) {
         val validationResult = validateUserName(username)
         if (validationResult) {
@@ -35,8 +38,14 @@ class StartScreenViewModel @Inject constructor(private val repository: DataRepos
                 val dataLoadState = repository.fetchGitRepositories(username)
                 when (dataLoadState) {
                     is DataLoadState.Data -> {
-                        _repositoryListLiveData.value =
-                            SingleEvent(ParcelableGitRepositoryList(dataLoadState.data))
+                        val repositoriesList = dataLoadState.data
+
+                        if(repositoriesList.isNotEmpty()){
+                            _repositoryListLiveData.value =
+                                SingleEvent(GitRepositoryListParcelable(repositoriesList))
+                        }else{
+                            _navigateToEmptyScreen.value = SingleEvent(username)
+                        }
                     }
 
                     is DataLoadState.LoadError -> {

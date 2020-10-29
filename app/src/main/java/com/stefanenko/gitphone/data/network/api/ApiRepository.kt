@@ -9,4 +9,10 @@ interface ApiRepository {
 
     @GET("users/{username}/repos")
     suspend fun fetchGitRepository(@Path("username") username: String): Response<List<GitRepository>>
+
+//    @GET("repos/{username}/{repo}/commits")
+//    suspend fun fetchRepositoryCommits(
+//        @Path("username") username: String,
+//        @Path("repo") repositoryName: String
+//    ): Response<List<>>
 }

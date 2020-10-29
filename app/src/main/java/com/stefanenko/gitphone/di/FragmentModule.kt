@@ -1,5 +1,6 @@
 package com.stefanenko.gitphone.di
 
+import com.stefanenko.gitphone.ui.fragment.repositoryList.EmptyRepositoriesFragment
 import com.stefanenko.gitphone.ui.fragment.repositoryList.RepositoryListFragment
 import com.stefanenko.gitphone.ui.fragment.start.StartScreenFragment
 import dagger.Module
@@ -13,4 +14,7 @@ abstract class FragmentModule {
 
     @ContributesAndroidInjector()
     abstract fun provideRepositoryListFragment(): RepositoryListFragment
+
+    @ContributesAndroidInjector()
+    abstract fun provideEmptyRepositoriesFragment(): EmptyRepositoriesFragment
 }

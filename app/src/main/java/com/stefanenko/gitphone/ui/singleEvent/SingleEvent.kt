@@ -1,16 +1,14 @@
 package com.stefanenko.gitphone.ui.singleEvent
 
-class SingleEvent <T>(private val content: T) {
+class SingleEvent<T>(private var content: T) {
 
     var isHandled = false
         private set
 
-    fun getNotHandledContent(): T?{
-        return if(isHandled){
-            null
-        }else{
+    fun handleEvent(action: (T) -> Unit) {
+        if (!isHandled) {
+            action.invoke(content)
             isHandled = true
-            content
         }
     }
 }

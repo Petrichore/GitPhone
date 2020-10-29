@@ -5,6 +5,6 @@ import com.stefanenko.gitphone.data.dto.gitRepository.GitRepository
 import kotlinx.android.parcel.Parcelize
 
 @Parcelize
-data class ParcelableGitRepositoryList(
+data class GitRepositoryListParcelable(
     val repositoryList: List<GitRepository>
 ): Parcelable

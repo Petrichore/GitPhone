@@ -7,18 +7,32 @@
 
     <fragment
         android:id="@+id/repositoryListFragment"
+        tools:layout="@layout/fragment_repositories"
         android:name="com.stefanenko.gitphone.ui.fragment.repositoryList.RepositoryListFragment"
         android:label="RepositoryListFragment" >
         <argument
             android:name="repositoryList"
-            app:argType="com.stefanenko.gitphone.data.localData.ParcelableGitRepositoryList" />
+            app:argType="com.stefanenko.gitphone.data.localData.GitRepositoryListParcelable" />
     </fragment>
     <fragment
         android:id="@+id/startScreenFragment"
+        tools:layout="@layout/fragment_start_screen"
         android:name="com.stefanenko.gitphone.ui.fragment.start.StartScreenFragment"
         android:label="StartScreenFragment" >
         <action
             android:id="@+id/action_startScreenFragment_to_repositoryListFragment"
             app:destination="@id/repositoryListFragment" />
+        <action
+            android:id="@+id/action_startScreenFragment_to_emptyRepo"
+            app:destination="@id/emptyRepo" />
+    </fragment>
+    <fragment
+        android:id="@+id/emptyRepo"
+        tools:layout="@layout/fragment_repositories_empty"
+        android:name="com.stefanenko.gitphone.ui.fragment.repositoryList.EmptyRepositoriesFragment"
+        android:label="EmptyRepo" >
+        <argument
+            android:name="username"
+            app:argType="string" />
     </fragment>
 </navigation>

@@ -6,5 +6,10 @@
 
 <!--    Button-->
     <string name="btn_fetch_repo">Fetch repositories</string>
+    <string name="btn_to_start_screen">To start screen</string>
+
+<!--    TextView-->
+    <string name="text_no_repositories_yet">has not created any repositories yet</string>
+
 
 </resources>
