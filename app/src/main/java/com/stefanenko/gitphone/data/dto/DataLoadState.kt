@@ -1,4 +1,4 @@
-package com.stefanenko.gitphone.data
+package com.stefanenko.gitphone.data.dto
 
 sealed class DataLoadState<T> {
     data class Data<T>(val data: T) : DataLoadState<T>()

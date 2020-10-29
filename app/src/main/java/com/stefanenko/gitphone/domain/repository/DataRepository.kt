@@ -1,7 +1,6 @@
-package com.stefanenko.gitphone.data.repository
+package com.stefanenko.gitphone.domain.repository
 
-import android.util.Log
-import com.stefanenko.gitphone.data.DataLoadState
+import com.stefanenko.gitphone.data.dto.DataLoadState
 import com.stefanenko.gitphone.data.dto.gitRepository.GitRepository
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext

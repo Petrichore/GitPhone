@@ -10,13 +10,24 @@ import dagger.android.support.AndroidSupportInjectionModule
 import javax.inject.Singleton
 
 @Singleton
-@Component(modules = [
-    AndroidInjectionModule::class,
-    AppModule::class,
-    ViewModelModule::class,
-    FragmentModule::class
-])
+@Component(
+    modules = [
+        AndroidInjectionModule::class,
+        AppModule::class,
+        ViewModelModule::class,
+        FragmentModule::class,
+        DatabaseModule::class
+    ]
+)
 interface AppComponent {
 
     fun inject(app: App)
+
+    @Component.Builder
+    interface Builder {
+        fun build(): AppComponent
+
+        @BindsInstance
+        fun application(app: Application)
+    }
 }

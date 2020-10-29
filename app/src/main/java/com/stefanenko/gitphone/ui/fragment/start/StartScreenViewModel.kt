@@ -4,9 +4,9 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.stefanenko.gitphone.data.DataLoadState
+import com.stefanenko.gitphone.data.dto.DataLoadState
 import com.stefanenko.gitphone.data.localData.GitRepositoryListParcelable
-import com.stefanenko.gitphone.data.repository.DataRepository
+import com.stefanenko.gitphone.domain.repository.DataRepository
 import com.stefanenko.gitphone.ui.singleEvent.SingleEvent
 import kotlinx.coroutines.launch
 import javax.inject.Inject

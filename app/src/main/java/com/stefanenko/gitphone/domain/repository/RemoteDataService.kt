@@ -1,6 +1,6 @@
-package com.stefanenko.gitphone.data.repository
+package com.stefanenko.gitphone.domain.repository
 
-import com.stefanenko.gitphone.data.DataLoadState
+import com.stefanenko.gitphone.data.dto.DataLoadState
 import com.stefanenko.gitphone.data.dto.gitRepository.GitRepository
 import com.stefanenko.gitphone.data.network.RetrofitService
 import com.stefanenko.gitphone.data.network.api.ApiRepository
