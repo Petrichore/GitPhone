@@ -7,7 +7,7 @@ import kotlinx.android.synthetic.main.item_repository.view.*
 
 class RepositoryViewHolder(
     private val view: View,
-    private val onItemClickListener: (GitRepository) -> Unit
+    private val onStarClickListener: (GitRepository) -> Unit
 ) : RecyclerView.ViewHolder(view) {
 
     private val repositoryName = view.repositoryNameText
@@ -22,8 +22,8 @@ class RepositoryViewHolder(
             projectDescription.text = description
         }
 
-        view.setOnClickListener {
-            onItemClickListener.invoke(item)
+        view.emptyStar.setOnClickListener {
+            onStarClickListener.invoke(item)
         }
     }
 }

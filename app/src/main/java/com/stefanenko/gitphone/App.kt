@@ -4,16 +4,13 @@ import android.app.Application
 import com.stefanenko.gitphone.di.AppComponent
 import com.stefanenko.gitphone.di.AppModule
 import com.stefanenko.gitphone.di.DaggerAppComponent
+import com.stefanenko.gitphone.di.DatabaseModule
 import dagger.android.AndroidInjector
 import dagger.android.DispatchingAndroidInjector
 import dagger.android.HasAndroidInjector
 import javax.inject.Inject
 
-class App: Application(), HasAndroidInjector {
-
-    companion object{
-        lateinit var appComponent: AppComponent
-    }
+class App : Application(), HasAndroidInjector {
 
     @Inject
     lateinit var dispatchingAndroidInjector: DispatchingAndroidInjector<Any>
@@ -23,8 +20,8 @@ class App: Application(), HasAndroidInjector {
         initDagger()
     }
 
-    private fun initDagger(){
-        DaggerAppComponent.builder().build().inject(this)
+    private fun initDagger() {
+        DaggerAppComponent.builder().databaseModule(DatabaseModule(this)).build().inject(this)
     }
 
     override fun androidInjector(): AndroidInjector<Any> = dispatchingAndroidInjector

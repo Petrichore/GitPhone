@@ -6,6 +6,10 @@ import kotlinx.android.parcel.Parcelize
 
 @Parcelize
 data class GitRepositoryOwner(
+
+    @SerializedName("id")
+    val userId: Long,
+
     @SerializedName("login")
     val ownerName: String,
 

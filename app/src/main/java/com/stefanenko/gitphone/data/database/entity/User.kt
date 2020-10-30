@@ -9,7 +9,7 @@ import java.io.Serializable
 data class User(
     @PrimaryKey
     @ColumnInfo(name = "id_user")
-    val id: Int,
+    val userId: Long,
 
     @ColumnInfo(name = "username")
     val name: String,

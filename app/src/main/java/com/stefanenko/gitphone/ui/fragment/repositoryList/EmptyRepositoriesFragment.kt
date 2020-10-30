@@ -1,6 +1,5 @@
 package com.stefanenko.gitphone.ui.fragment.repositoryList
 
-import android.annotation.SuppressLint
 import android.os.Bundle
 import android.view.View
 import com.stefanenko.gitphone.R

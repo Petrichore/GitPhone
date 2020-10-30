@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="utf-8"?>
+<MotionScene
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:motion="http://schemas.android.com/apk/res-auto">
+
+    <Transition
+        motion:constraintSetEnd="@+id/end"
+        motion:constraintSetStart="@id/start"
+        motion:duration="700"
+        motion:motionInterpolator="cubic(0.33,0.32,0.62,0.61)">
+       <KeyFrameSet>
+       </KeyFrameSet>
+    </Transition>
+
+    <ConstraintSet android:id="@+id/start">
+        <Constraint
+            android:id="@+id/emptyStar"
+            motion:layout_constraintEnd_toEndOf="parent"
+            android:layout_width="32dp"
+            android:layout_height="32dp"
+            android:layout_marginEnd="16dp"
+            android:alpha="1.0"
+            motion:layout_constraintTop_toTopOf="@+id/repositoryNameText" />
+        <Constraint
+            android:id="@+id/fillStar"
+            motion:layout_constraintEnd_toEndOf="parent"
+            android:layout_width="32dp"
+            android:layout_height="32dp"
+            android:layout_marginEnd="16dp"
+            android:alpha="0.0"
+            motion:layout_constraintTop_toTopOf="@+id/repositoryNameText" />
+    </ConstraintSet>
+
+    <ConstraintSet android:id="@+id/end">
+        <Constraint
+            android:id="@+id/emptyStar"
+            motion:layout_constraintEnd_toEndOf="parent"
+            android:layout_width="32dp"
+            android:layout_height="32dp"
+            android:layout_marginEnd="16dp"
+            android:alpha="0.0"
+            motion:layout_constraintTop_toTopOf="@+id/repositoryNameText" />
+        <Constraint
+            android:id="@+id/fillStar"
+            motion:layout_constraintEnd_toEndOf="parent"
+            android:layout_width="32dp"
+            android:layout_height="32dp"
+            android:layout_marginEnd="16dp"
+            android:alpha="1.0"
+            motion:layout_constraintTop_toTopOf="@+id/repositoryNameText" />
+    </ConstraintSet>
+</MotionScene>

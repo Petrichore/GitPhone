@@ -1,4 +1,4 @@
-package com.stefanenko.gitphone.ui.fragment.start
+package com.stefanenko.gitphone.ui.fragment.enterToRepository
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
@@ -6,12 +6,12 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.stefanenko.gitphone.data.dto.DataLoadState
 import com.stefanenko.gitphone.data.localData.GitRepositoryListParcelable
-import com.stefanenko.gitphone.domain.repository.DataRepository
+import com.stefanenko.gitphone.domain.DataRepository
 import com.stefanenko.gitphone.ui.singleEvent.SingleEvent
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
-class StartScreenViewModel @Inject constructor(private val repository: DataRepository) :
+class GitUsernameViewModel @Inject constructor(private val repository: DataRepository) :
     ViewModel() {
 
     private val _repositoryListLiveData =
@@ -25,7 +25,7 @@ class StartScreenViewModel @Inject constructor(private val repository: DataRepos
 
     private val _loadErrorLiveData = MutableLiveData<SingleEvent<String>>()
     val loadErrorLiveData: LiveData<SingleEvent<String>>
-        get() = _validationErrorLiveData
+        get() = _loadErrorLiveData
 
     private val _navigateToEmptyScreen = MutableLiveData<SingleEvent<String>>()
     val navigateToEmptyScreen: LiveData<SingleEvent<String>>

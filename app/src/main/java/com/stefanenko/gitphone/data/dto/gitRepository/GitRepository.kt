@@ -6,6 +6,10 @@ import kotlinx.android.parcel.Parcelize
 
 @Parcelize
 data class GitRepository(
+
+    @SerializedName("id")
+    val repoId: Long,
+
     @SerializedName("name")
     val repoName: String,
 
@@ -13,7 +17,7 @@ data class GitRepository(
     val isPrivate: Boolean,
 
     @SerializedName("description")
-    val description: String,
+    val description: String = "",
 
     @SerializedName("fork")
     val isFork: Boolean,

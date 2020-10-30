@@ -1,9 +1,11 @@
-package com.stefanenko.gitphone.domain.repository
+package com.stefanenko.gitphone.domain
 
 import com.stefanenko.gitphone.data.dto.DataLoadState
 import com.stefanenko.gitphone.data.dto.gitRepository.GitRepository
 import com.stefanenko.gitphone.data.network.RetrofitService
 import com.stefanenko.gitphone.data.network.api.ApiRepository
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.withContext
 import retrofit2.Response
 import java.lang.Exception
 import javax.inject.Inject
@@ -15,13 +17,16 @@ class RemoteDataService @Inject constructor(retrofitService: RetrofitService) {
     private val repositoryApiService = retrofitService.createService(ApiRepository::class.java)
 
     suspend fun fetchRepository(username: String): DataLoadState<List<GitRepository>> {
-        return try {
-            val response = repositoryApiService.fetchGitRepository(username)
-            return handleResponse(response)
-        } catch (e: Exception) {
-            e.printStackTrace()
-            DataLoadState.LoadError("NETWORK ERROR")
+        return withContext(Dispatchers.IO) {
+            try {
+                val response = repositoryApiService.fetchGitRepository(username)
+                return@withContext handleResponse(response)
+            } catch (e: Exception) {
+                e.printStackTrace()
+                DataLoadState.LoadError("NETWORK ERROR")
+            }
         }
+
     }
 
     private fun <T> handleResponse(response: Response<T>): DataLoadState<T> {
@@ -29,7 +34,7 @@ class RemoteDataService @Inject constructor(retrofitService: RetrofitService) {
             val body = response.body()
             if (body != null) {
                 DataLoadState.Data(body)
-            }else{
+            } else {
                 DataLoadState.LoadError("No response data")
             }
         } else {

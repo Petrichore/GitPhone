@@ -1,19 +1,21 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.motion.widget.MotionLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/motionLayout"
     android:layout_width="match_parent"
-    android:layout_marginStart="24dp"
-    android:layout_marginEnd="24dp"
     android:layout_height="150dp"
     android:layout_gravity="center_horizontal"
+    android:layout_marginStart="24dp"
+    android:layout_marginEnd="24dp"
     android:background="@drawable/bg_repositoty_card"
     android:elevation="12dp"
-    android:orientation="vertical">
+    android:orientation="vertical"
+    app:layoutDescription="@xml/item_repository_scene">
 
     <TextView
         android:id="@+id/repositoryNameText"
-        android:layout_width="wrap_content"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
         android:layout_marginTop="16dp"
@@ -21,6 +23,9 @@
         android:textColor="@color/black"
         android:textSize="18sp"
         app:drawableStartCompat="@drawable/ic_github_black"
+        app:layout_constraintEnd_toStartOf="@+id/emptyStar"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
         tools:text="GitPhone" />
 
     <TextView
@@ -31,6 +36,8 @@
         android:layout_marginTop="8dp"
         android:textColor="@color/black"
         android:textSize="16sp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/repositoryNameText"
         tools:text="Kotlin" />
 
     <TextView
@@ -45,6 +52,29 @@
         android:maxLines="3"
         android:textColor="@color/text_description_day"
         android:textSize="14sp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/languageText"
         tools:text="wdawdadadawd" />
 
-</LinearLayout>
+
+    <ImageView
+        android:id="@+id/fillStar"
+        android:layout_width="32dp"
+        android:layout_height="32dp"
+        android:layout_marginEnd="16dp"
+        android:padding="4dp"
+        android:src="@drawable/ic_star"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/repositoryNameText" />
+
+    <ImageView
+        android:id="@+id/emptyStar"
+        android:layout_width="32dp"
+        android:layout_height="32dp"
+        android:layout_marginEnd="16dp"
+        android:padding="4dp"
+        android:src="@drawable/ic_star_empty"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/repositoryNameText" />
+
+</androidx.constraintlayout.motion.widget.MotionLayout>
