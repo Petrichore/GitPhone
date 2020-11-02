@@ -5,10 +5,11 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.stefanenko.gitphone.R
 import com.stefanenko.gitphone.data.dto.gitRepository.GitRepository
+import com.stefanenko.gitphone.domain.entity.RepositoryLocal
 
 class AdapterRepositoryList(
-    private val itemList: List<GitRepository>,
-    private val onStarClickListener: (GitRepository) -> Unit
+    private val itemList: List<RepositoryLocal>,
+    private val onStarClickListener: (RepositoryLocal) -> Unit
 ): RecyclerView.Adapter<RepositoryViewHolder>() {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RepositoryViewHolder {

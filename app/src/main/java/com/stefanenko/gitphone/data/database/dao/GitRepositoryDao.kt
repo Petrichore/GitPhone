@@ -1,9 +1,6 @@
 package com.stefanenko.gitphone.data.database.dao
 
-import androidx.room.Dao
-import androidx.room.Insert
-import androidx.room.Query
-import androidx.room.Transaction
+import androidx.room.*
 import com.stefanenko.gitphone.data.database.entity.Repository
 import com.stefanenko.gitphone.data.database.entity.User
 import com.stefanenko.gitphone.data.database.entity.UserWithRepo
@@ -19,9 +16,12 @@ interface GitRepositoryDao {
     @Query("select * from Repository")
     suspend fun getRepositories(): List<Repository>
 
-    @Insert
+    @Query("select * from User where id_user == :id")
+    suspend fun getUserById(id: Long): User?
+
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun insertNewRepository(repository: Repository)
 
-    @Insert
-    suspend fun insertNewUser(user: User)
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    suspend fun insertNewUser(user: User): Long
 }

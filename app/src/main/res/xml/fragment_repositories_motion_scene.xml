@@ -3,7 +3,6 @@
     xmlns:motion="http://schemas.android.com/apk/res-auto">
 
     <Transition
-        motion:constraintSetEnd="@+id/end"
         motion:constraintSetStart="@id/start"
         motion:duration="1000">
         <KeyFrameSet></KeyFrameSet>
@@ -19,14 +18,16 @@
             android:layout_height="150dp"
             android:layout_marginStart="16dp"
             android:layout_marginTop="16dp"
+            android:layout_marginBottom="16dp"
+            motion:layout_constraintBottom_toTopOf="@id/repositoryRecycler"
             motion:layout_constraintStart_toStartOf="parent"
             motion:layout_constraintTop_toTopOf="parent" />
         <Constraint
             android:id="@+id/ownerNameText"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="8dp"
             android:layout_marginStart="16dp"
+            android:layout_marginTop="8dp"
             android:layout_marginEnd="16dp"
             motion:layout_constraintStart_toEndOf="@+id/ownerImageView"
             motion:layout_constraintTop_toTopOf="@+id/ownerImageView" />
@@ -55,7 +56,9 @@
             android:layout_width="50dp"
             android:layout_height="50dp"
             android:layout_marginStart="16dp"
-            android:layout_marginTop="16dp"
+            android:layout_marginTop="8dp"
+            android:layout_marginBottom="8dp"
+            motion:layout_constraintBottom_toTopOf="@id/repositoryRecycler"
             motion:layout_constraintStart_toStartOf="parent"
             motion:layout_constraintTop_toTopOf="parent" />
     </ConstraintSet>

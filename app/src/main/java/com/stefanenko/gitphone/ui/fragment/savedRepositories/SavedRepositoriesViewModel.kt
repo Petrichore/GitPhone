@@ -4,9 +4,10 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.stefanenko.gitphone.data.dto.DataLoadState
+import com.stefanenko.gitphone.data.dto.DataResponseState
 import com.stefanenko.gitphone.data.dto.gitRepository.GitRepository
 import com.stefanenko.gitphone.domain.DataRepository
+import com.stefanenko.gitphone.domain.entity.RepositoryOwner
 import com.stefanenko.gitphone.ui.singleEvent.SingleEvent
 import kotlinx.coroutines.launch
 import javax.inject.Inject
@@ -19,20 +20,20 @@ class SavedRepositoriesViewModel @Inject constructor(private val dataRepository:
         get() = _loadErrorLiveData
 
     private val _repositoryListLiveData =
-        MutableLiveData<SingleEvent<List<GitRepository>>>()
-    val repositoryListLiveData: LiveData<SingleEvent<List<GitRepository>>>
+        MutableLiveData<SingleEvent<List<RepositoryOwner>>>()
+    val repositoryListLiveData: LiveData<SingleEvent<List<RepositoryOwner>>>
         get() = _repositoryListLiveData
 
-    fun fetchSavedRepositories() {
+    fun fetchSavedRepositoriesWithUser() {
         viewModelScope.launch {
-            val dataLoadState = dataRepository.fetchAllSavedRepositories()
+            val dataLoadState = dataRepository.getSavedRepositoriesWithUser()
 
             when (dataLoadState) {
-                is DataLoadState.Data -> {
+                is DataResponseState.Data -> {
                     _repositoryListLiveData.value = SingleEvent(dataLoadState.data)
                 }
 
-                is DataLoadState.LoadError -> {
+                is DataResponseState.Error -> {
                     _loadErrorLiveData.value = SingleEvent(dataLoadState.error)
                 }
             }

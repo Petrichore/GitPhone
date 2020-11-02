@@ -3,8 +3,14 @@ package com.stefanenko.gitphone.domain
 import android.util.Log
 import com.stefanenko.gitphone.data.database.dao.GitRepositoryDao
 import com.stefanenko.gitphone.data.database.entity.Repository
-import com.stefanenko.gitphone.data.dto.DataLoadState
+import com.stefanenko.gitphone.data.database.entity.User
+import com.stefanenko.gitphone.data.dto.DataResponseState
 import com.stefanenko.gitphone.data.dto.gitRepository.GitRepository
+import com.stefanenko.gitphone.domain.entity.RepositoryOwner
+import com.stefanenko.gitphone.util.exception.DataBaseExceptionConstantStorage.INSERT_ERROR
+import com.stefanenko.gitphone.util.exception.DataBaseExceptionConstantStorage.NO_SUCH_USER_IN_DATABASE
+import com.stefanenko.gitphone.util.exception.DataExceptionConstantStorage.INVALID_STATE
+import com.stefanenko.gitphone.util.toRepositoryOwner
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import java.lang.Exception
@@ -12,40 +18,115 @@ import javax.inject.Inject
 
 class DatabaseService @Inject constructor(private val gitRepositoryDao: GitRepositoryDao) {
 
-    suspend fun getAllRepositoriesWithUsers(): DataLoadState<List<GitRepository>> {
+    suspend fun getAllRepositoriesWithUsers(): DataResponseState<List<RepositoryOwner>> {
         return withContext(Dispatchers.IO) {
             try {
-                val databaseResponse = gitRepositoryDao.getUserWithRepositories()
-                Log.d("database response:", "$databaseResponse")
-                DataLoadState.Data(arrayListOf())
+                val userWithRepoList = gitRepositoryDao.getUserWithRepositories()
+                val repositoryWithOwnersList = mutableListOf<RepositoryOwner>()
+
+                userWithRepoList.forEach {
+                    repositoryWithOwnersList.add(it.toRepositoryOwner())
+                }
+
+                DataResponseState.Data(repositoryWithOwnersList)
             } catch (e: Exception) {
                 e.printStackTrace()
-                DataLoadState.LoadError("Database error")
+                DataResponseState.Error("Database error")
             }
         }
     }
 
-    suspend fun insertNewRepository(repository: Repository): DataLoadState<Boolean> {
+    suspend fun insertNewRepository(repository: Repository): DataResponseState<Boolean> {
         return withContext(Dispatchers.IO) {
             try {
+                val isOwnerExistPair = isRepositoryOwnerExist(repository.userId)
+                if (isOwnerExistPair.first) {
+                    gitRepositoryDao.insertNewRepository(repository)
+                    DataResponseState.Data(true)
+                } else {
+                    DataResponseState.Error(NO_SUCH_USER_IN_DATABASE)
+                }
+            } catch (e: Exception) {
+                e.printStackTrace()
+                DataResponseState.Error(INSERT_ERROR)
+            }
+        }
+    }
+
+    suspend fun addRepositoryOwnerAndCacheRepository(
+        repository: Repository,
+        user: User
+    ): DataResponseState<Boolean> {
+        return withContext(Dispatchers.IO) {
+            try {
+                gitRepositoryDao.insertNewUser(user)
                 gitRepositoryDao.insertNewRepository(repository)
-                DataLoadState.Data(true)
+                DataResponseState.Data(true)
             } catch (e: Exception) {
                 e.printStackTrace()
-                DataLoadState.LoadError("InsertError")
+                DataResponseState.Error(INSERT_ERROR)
             }
         }
     }
 
-    suspend fun getAllRepositories(): DataLoadState<List<GitRepository>>{
+
+    private suspend fun insertNewUser(user: User): DataResponseState<Boolean> {
+        return withContext(Dispatchers.IO) {
+            try {
+                val userId = gitRepositoryDao.insertNewUser(user)
+                if (userId == user.userId) {
+                    DataResponseState.Data(true)
+                } else {
+                    DataResponseState.Error("InsertError")
+                }
+            } catch (e: Exception) {
+                e.printStackTrace()
+                DataResponseState.Error("DatabaseError")
+            }
+        }
+    }
+
+    suspend fun getAllRepositories(): DataResponseState<List<GitRepository>> {
         return withContext(Dispatchers.IO) {
             try {
                 val databaseResponse = gitRepositoryDao.getRepositories()
                 Log.d("database response:", "$databaseResponse")
-                DataLoadState.Data(arrayListOf())
+                DataResponseState.Data(arrayListOf())
             } catch (e: Exception) {
                 e.printStackTrace()
-                DataLoadState.LoadError("Database error")
+                DataResponseState.Error("Database error")
+            }
+        }
+    }
+
+    suspend fun getUserById(id: Long): DataResponseState<User> {
+        return withContext(Dispatchers.IO) {
+            try {
+                val user = gitRepositoryDao.getUserById(id)
+                if (user != null) {
+                    DataResponseState.Data(user)
+                } else {
+                    DataResponseState.Error(NO_SUCH_USER_IN_DATABASE)
+                }
+            } catch (e: Exception) {
+                e.printStackTrace()
+                DataResponseState.Error("Database error")
+            }
+        }
+    }
+
+    private suspend fun isRepositoryOwnerExist(userId: Long): Pair<Boolean, String> {
+        val dataLoadState = getUserById(userId)
+
+        return when (dataLoadState) {
+            is DataResponseState.Data -> {
+                Pair(true, "")
+            }
+            is DataResponseState.Error -> {
+                Pair(false, dataLoadState.error)
+            }
+            else -> {
+                Pair(false, INVALID_STATE)
             }
         }
     }

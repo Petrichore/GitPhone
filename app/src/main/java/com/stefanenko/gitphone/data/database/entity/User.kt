@@ -16,4 +16,4 @@ data class User(
 
     @ColumnInfo(name = "image")
     val image: String
-): Serializable
+)

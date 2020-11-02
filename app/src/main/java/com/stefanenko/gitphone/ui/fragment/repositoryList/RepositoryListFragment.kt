@@ -3,13 +3,13 @@ package com.stefanenko.gitphone.ui.fragment.repositoryList
 import android.app.AlertDialog
 import android.content.DialogInterface
 import android.os.Bundle
-import android.util.Log
 import android.view.View
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.bumptech.glide.Glide
 import com.stefanenko.gitphone.R
-import com.stefanenko.gitphone.data.dto.gitRepository.GitRepository
+import com.stefanenko.gitphone.domain.entity.RepositoryLocal
+import com.stefanenko.gitphone.domain.entity.RepositoryOwner
 import com.stefanenko.gitphone.ui.ViewModelFactory
 import com.stefanenko.gitphone.ui.base.BaseObserveFragment
 import com.stefanenko.gitphone.ui.base.decorators.VerticalItemDecoration
@@ -30,7 +30,7 @@ class RepositoryListFragment : BaseObserveFragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         val repositoryList =
-            RepositoryListFragmentArgs.fromBundle(requireArguments()).repositoryList.repositoryList
+            RepositoryListFragmentArgs.fromBundle(requireArguments()).userRepositories
         setUiData(repositoryList)
     }
 
@@ -39,37 +39,51 @@ class RepositoryListFragment : BaseObserveFragment() {
     }
 
     override fun observeViewModel() {
-        viewModel.loadSuccessfullyLiveData.observe(viewLifecycleOwner, { singleEvent ->
+        viewModel.successResponseLiveData.observe(viewLifecycleOwner, { singleEvent ->
             singleEvent.handleEvent {
-                motionLayout.transitionToStart()
+                motionLayout.transitionToEnd()
                 showDebugLog("Data have added")
             }
         })
 
-        viewModel.loadErrorLiveData.observe(viewLifecycleOwner, { singleEvent ->
+        viewModel.errorLiveData.observe(viewLifecycleOwner, { singleEvent ->
             singleEvent.handleEvent {
                 showDebugLog(it)
             }
         })
+
+        viewModel.noOwnersForSavingRepository.observe(viewLifecycleOwner, { singleEvent ->
+            singleEvent.handleEvent { eventData ->
+                showAlertDialog("Owner missing", eventData.second, {
+                    viewModel.addOwnerAndSavedRepository(
+                        eventData.first,
+                        RepositoryListFragmentArgs.fromBundle(requireArguments()).userRepositories
+                    )
+                    it.dismiss()
+                }, {
+                    it.dismiss()
+                })
+            }
+        })
     }
 
-    private fun setUiData(repositoryList: List<GitRepository>) {
-        with(repositoryList[0].repoOwnerGit) {
-            ownerNameText.text = ownerName
-            Glide.with(requireContext()).load(avatarUrl).into(ownerImageView)
-        }
+    private fun setUiData(repositoryOwner: RepositoryOwner) {
+        ownerNameText.text = repositoryOwner.name
+        Glide.with(requireContext()).load(repositoryOwner.imageUrl).into(ownerImageView)
 
-        initRecycler(repositoryList)
+        initRecycler(repositoryOwner.repositoryList)
     }
 
-    private fun initRecycler(itemList: List<GitRepository>) {
+    private fun initRecycler(itemList: List<RepositoryLocal>) {
         with(repositoryRecycler) {
             layoutManager = LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false)
             adapter = AdapterRepositoryList(itemList) {
-                Log.d("On star click", "Yessss")
-                showAlertDialog("Save repository", "Do you want to save ${it.repoName}",
+                showAlertDialog("Save repository", "Do you want to save ${it.name}",
                     { dialog ->
-                        viewModel.cacheRepository(it)
+                        viewModel.saveRepository(
+                            it,
+                            RepositoryListFragmentArgs.fromBundle(requireArguments()).userRepositories.userId
+                        )
                         dialog.dismiss()
                     }, { dialog ->
                         dialog.dismiss()
@@ -88,7 +102,7 @@ class RepositoryListFragment : BaseObserveFragment() {
         AlertDialog.Builder(context)
             .setTitle(title)
             .setMessage(message)
-            .setPositiveButton("Save") { dialog, _ ->
+            .setPositiveButton("Ok") { dialog, _ ->
                 positiveAction.invoke(dialog)
             }
             .setNegativeButton("Cancel") { dialog, _ ->

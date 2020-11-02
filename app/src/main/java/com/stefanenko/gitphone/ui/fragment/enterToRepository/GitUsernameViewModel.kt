@@ -4,20 +4,21 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.stefanenko.gitphone.data.dto.DataLoadState
-import com.stefanenko.gitphone.data.localData.GitRepositoryListParcelable
+import com.stefanenko.gitphone.data.dto.DataResponseState
 import com.stefanenko.gitphone.domain.DataRepository
+import com.stefanenko.gitphone.domain.entity.RepositoryOwner
 import com.stefanenko.gitphone.ui.singleEvent.SingleEvent
+import com.stefanenko.gitphone.util.exception.NetworkExceptionConstantStorage.DATA_EMPTY_BODY
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 class GitUsernameViewModel @Inject constructor(private val repository: DataRepository) :
     ViewModel() {
 
-    private val _repositoryListLiveData =
-        MutableLiveData<SingleEvent<GitRepositoryListParcelable>>()
-    val repositoryListLiveData: LiveData<SingleEvent<GitRepositoryListParcelable>>
-        get() = _repositoryListLiveData
+    private val _userRepositoriesLiveData =
+        MutableLiveData<SingleEvent<RepositoryOwner>>()
+    val userRepositoriesLiveData: LiveData<SingleEvent<RepositoryOwner>>
+        get() = _userRepositoriesLiveData
 
     private val _validationErrorLiveData = MutableLiveData<SingleEvent<String>>()
     val validationErrorLiveData: LiveData<SingleEvent<String>>
@@ -35,21 +36,22 @@ class GitUsernameViewModel @Inject constructor(private val repository: DataRepos
         val validationResult = validateUserName(username)
         if (validationResult) {
             viewModelScope.launch {
-                val dataLoadState = repository.fetchGitRepositories(username)
+                val dataLoadState = repository.getUserGitRepositories(username)
                 when (dataLoadState) {
-                    is DataLoadState.Data -> {
-                        val repositoriesList = dataLoadState.data
-
-                        if(repositoriesList.isNotEmpty()){
-                            _repositoryListLiveData.value =
-                                SingleEvent(GitRepositoryListParcelable(repositoriesList))
-                        }else{
-                            _navigateToEmptyScreen.value = SingleEvent(username)
-                        }
+                    is DataResponseState.Data -> {
+                        _userRepositoriesLiveData.value = SingleEvent((dataLoadState.data))
                     }
 
-                    is DataLoadState.LoadError -> {
-                        _loadErrorLiveData.value = SingleEvent(dataLoadState.error)
+                    is DataResponseState.Error -> {
+                        when (dataLoadState.error) {
+                            DATA_EMPTY_BODY -> {
+                                _navigateToEmptyScreen.value = SingleEvent(username)
+                            }
+
+                            else -> {
+                                _loadErrorLiveData.value = SingleEvent(dataLoadState.error)
+                            }
+                        }
                     }
 
                     else -> {

@@ -4,34 +4,69 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.stefanenko.gitphone.data.dto.DataLoadState
-import com.stefanenko.gitphone.data.dto.gitRepository.GitRepository
+import com.stefanenko.gitphone.data.dto.DataResponseState
 import com.stefanenko.gitphone.domain.DataRepository
+import com.stefanenko.gitphone.domain.entity.RepositoryLocal
+import com.stefanenko.gitphone.domain.entity.RepositoryOwner
 import com.stefanenko.gitphone.ui.singleEvent.SingleEvent
+import com.stefanenko.gitphone.util.exception.DataBaseExceptionConstantStorage.NO_SUCH_USER_IN_DATABASE
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
-class RepositoryListViewModel @Inject constructor(private val dataRepository: DataRepository): ViewModel() {
+class RepositoryListViewModel @Inject constructor(private val dataRepository: DataRepository) :
+    ViewModel() {
 
-    private val _loadErrorLiveData = MutableLiveData<SingleEvent<String>>()
-    val loadErrorLiveData: LiveData<SingleEvent<String>>
-        get() = _loadErrorLiveData
+    private val _errorLiveData = MutableLiveData<SingleEvent<String>>()
+    val errorLiveData: LiveData<SingleEvent<String>>
+        get() = _errorLiveData
 
-    private val _loadSuccessfullyLiveData = MutableLiveData<SingleEvent<Boolean>>()
-    val loadSuccessfullyLiveData: LiveData<SingleEvent<Boolean>>
-        get() = _loadSuccessfullyLiveData
+    private val _successResponseLiveData = MutableLiveData<SingleEvent<Boolean>>()
+    val successResponseLiveData: LiveData<SingleEvent<Boolean>>
+        get() = _successResponseLiveData
 
-    fun cacheRepository(repository: GitRepository){
+    private val _noOwnersForSavingRepository =
+        MutableLiveData<SingleEvent<Pair<RepositoryLocal, String>>>()
+    val noOwnersForSavingRepository: LiveData<SingleEvent<Pair<RepositoryLocal, String>>>
+        get() = _noOwnersForSavingRepository
+
+    fun saveRepository(repository: RepositoryLocal, userId: Long) {
         viewModelScope.launch {
-            val dataLoadState = dataRepository.insertNewRepository(repository)
+            val dataResponseState = dataRepository.insertNewRepository(repository, userId)
 
-            when(dataLoadState){
-                is DataLoadState.Data->{
-                    _loadSuccessfullyLiveData.value = SingleEvent(dataLoadState.data)
+            when (dataResponseState) {
+                is DataResponseState.Data -> {
+                    _successResponseLiveData.value = SingleEvent(dataResponseState.data)
                 }
 
-                is DataLoadState.LoadError->{
-                    _loadErrorLiveData.value = SingleEvent(dataLoadState.error)
+                is DataResponseState.Error -> {
+                    when (dataResponseState.error) {
+                        NO_SUCH_USER_IN_DATABASE -> {
+                            _noOwnersForSavingRepository.value =
+                                SingleEvent(
+                                    Pair(
+                                        repository,
+                                        "No match owners of this repository in database, add one and saved this repository?"
+                                    )
+                                )
+                        }
+                        else -> _errorLiveData.value = SingleEvent(dataResponseState.error)
+                    }
+                }
+            }
+        }
+    }
+
+    fun addOwnerAndSavedRepository(repository: RepositoryLocal, repositoryOwner: RepositoryOwner) {
+        viewModelScope.launch {
+            val dataResponseState = dataRepository.insertNewRepository(repository, repositoryOwner)
+
+            when (dataResponseState) {
+                is DataResponseState.Data -> {
+                    _successResponseLiveData.value = SingleEvent(dataResponseState.data)
+                }
+
+                is DataResponseState.Error -> {
+                    _errorLiveData.value = SingleEvent(dataResponseState.error)
                 }
             }
         }

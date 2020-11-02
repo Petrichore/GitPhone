@@ -7,7 +7,7 @@ import com.stefanenko.gitphone.data.database.entity.Repository
 import com.stefanenko.gitphone.data.database.entity.User
 import javax.inject.Singleton
 
-@Database(entities = [User::class, Repository::class], version = 1)
+@Database(entities = [User::class, Repository::class], version = 2)
 abstract class Database : RoomDatabase() {
     abstract fun getRepositoryDao(): GitRepositoryDao
 }

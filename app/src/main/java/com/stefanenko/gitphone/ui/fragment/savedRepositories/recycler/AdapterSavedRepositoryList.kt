@@ -12,7 +12,7 @@ class AdapterSavedRepositoryList(
 ): RecyclerView.Adapter<SavedRepositoryViewHolder>() {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): SavedRepositoryViewHolder {
-        val view = LayoutInflater.from(parent.context).inflate(R.layout.item_repository, parent, false)
+        val view = LayoutInflater.from(parent.context).inflate(R.layout.item_saved_repository, parent, false)
         return SavedRepositoryViewHolder(view, onStarClickListener)
     }
 

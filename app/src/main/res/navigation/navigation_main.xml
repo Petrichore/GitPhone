@@ -11,8 +11,8 @@
         android:name="com.stefanenko.gitphone.ui.fragment.repositoryList.RepositoryListFragment"
         android:label="RepositoryListFragment" >
         <argument
-            android:name="repositoryList"
-            app:argType="com.stefanenko.gitphone.data.localData.GitRepositoryListParcelable" />
+            android:name="userRepositories"
+            app:argType="com.stefanenko.gitphone.domain.entity.RepositoryOwner" />
     </fragment>
     <fragment
         android:id="@+id/startScreenFragment"

@@ -13,17 +13,11 @@ data class GitRepository(
     @SerializedName("name")
     val repoName: String,
 
-    @SerializedName("private")
-    val isPrivate: Boolean,
-
     @SerializedName("description")
-    val description: String = "",
-
-    @SerializedName("fork")
-    val isFork: Boolean,
+    val description: String?,
 
     @SerializedName("language")
-    val language: String,
+    val language: String?,
 
     @SerializedName("owner")
     val repoOwnerGit: GitRepositoryOwner

@@ -1,8 +1,11 @@
 package com.stefanenko.gitphone.domain
 
-import com.stefanenko.gitphone.data.dto.DataLoadState
+import com.stefanenko.gitphone.data.dto.DataResponseState
 import com.stefanenko.gitphone.data.dto.gitRepository.GitRepository
+import com.stefanenko.gitphone.domain.entity.RepositoryLocal
+import com.stefanenko.gitphone.domain.entity.RepositoryOwner
 import com.stefanenko.gitphone.util.toRepository
+import com.stefanenko.gitphone.util.toUser
 import javax.inject.Inject
 import javax.inject.Singleton
 
@@ -12,20 +15,30 @@ class DataRepository @Inject constructor(
     private val databaseService: DatabaseService
 ) {
 
-    suspend fun fetchGitRepositories(username: String): DataLoadState<List<GitRepository>> {
-        return remoteService.fetchRepository(username)
+    suspend fun getUserGitRepositories(username: String): DataResponseState<RepositoryOwner> {
+        return remoteService.getRepository(username)
     }
 
-    suspend fun getCachedRepositories(): DataLoadState<List<GitRepository>> {
+    suspend fun getSavedRepositoriesWithUser(): DataResponseState<List<RepositoryOwner>> {
         return databaseService.getAllRepositoriesWithUsers()
     }
 
-    suspend fun insertNewRepository(gitRepository: GitRepository): DataLoadState<Boolean> {
-        val repository = gitRepository.toRepository()
+    suspend fun insertNewRepository(
+        localRepository: RepositoryLocal,
+        userId: Long
+    ): DataResponseState<Boolean> {
+        val repository = localRepository.toRepository(userId)
         return databaseService.insertNewRepository(repository)
     }
 
-    suspend fun fetchAllSavedRepositories(): DataLoadState<List<GitRepository>> {
-        return databaseService.getAllRepositories()
+    suspend fun insertNewRepository(
+        localRepository: RepositoryLocal,
+        repositoryOwner: RepositoryOwner
+    ): DataResponseState<Boolean> {
+        return databaseService.addRepositoryOwnerAndCacheRepository(
+            localRepository.toRepository(
+                repositoryOwner.userId
+            ), repositoryOwner.toUser()
+        )
     }
 }

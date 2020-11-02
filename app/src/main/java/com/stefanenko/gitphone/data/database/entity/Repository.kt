@@ -16,6 +16,9 @@ data class Repository(
     @ColumnInfo(name = "repository_name")
     val name: String,
 
+    @ColumnInfo(name = "language")
+    val language: String,
+
     @ColumnInfo(name = "description")
     val description: String
 )

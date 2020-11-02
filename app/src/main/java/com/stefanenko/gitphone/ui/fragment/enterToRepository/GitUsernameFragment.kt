@@ -1,5 +1,6 @@
 package com.stefanenko.gitphone.ui.fragment.enterToRepository
 
+import android.util.Log
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
 import com.stefanenko.gitphone.R
@@ -22,8 +23,9 @@ class GitUsernameFragment: BaseObserveFragment() {
     }
 
     override fun observeViewModel() {
-        viewModel.repositoryListLiveData.observe(viewLifecycleOwner, { singleEvent ->
+        viewModel.userRepositoriesLiveData.observe(viewLifecycleOwner, { singleEvent ->
             singleEvent.handleEvent {
+
                 findNavController().navigate(
                     StartScreenFragmentDirections.actionStartScreenFragmentToRepositoryListFragment(it)
                 )

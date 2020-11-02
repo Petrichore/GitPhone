@@ -8,7 +8,7 @@ import retrofit2.http.Path
 interface ApiRepository {
 
     @GET("users/{username}/repos")
-    suspend fun fetchGitRepository(@Path("username") username: String): Response<List<GitRepository>>
+    suspend fun getGitRepository(@Path("username") username: String): Response<List<GitRepository>>
 
 //    @GET("repos/{username}/{repo}/commits")
 //    suspend fun fetchRepositoryCommits(

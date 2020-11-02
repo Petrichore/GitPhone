@@ -14,8 +14,5 @@ data class GitRepositoryOwner(
     val ownerName: String,
 
     @SerializedName("avatar_url")
-    val avatarUrl: String,
-
-    @SerializedName("type")
-    val type: String
+    val avatarUrl: String
 ): Parcelable
