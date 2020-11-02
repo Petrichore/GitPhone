@@ -31,6 +31,10 @@ class SavedRepositoriesFragment: BaseObserveFragment() {
         })
     }
 
-    override fun setListeners() {
+    override fun onResume() {
+        super.onResume()
+        viewModel.fetchSavedRepositories()
     }
+
+    override fun setListeners() {}
 }

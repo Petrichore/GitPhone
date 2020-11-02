@@ -40,7 +40,7 @@ class DatabaseService @Inject constructor(private val gitRepositoryDao: GitRepos
     suspend fun getAllRepositories(): DataLoadState<List<GitRepository>>{
         return withContext(Dispatchers.IO) {
             try {
-                val databaseResponse = gitRepositoryDao.getUserWithRepositories()
+                val databaseResponse = gitRepositoryDao.getRepositories()
                 Log.d("database response:", "$databaseResponse")
                 DataLoadState.Data(arrayListOf())
             } catch (e: Exception) {

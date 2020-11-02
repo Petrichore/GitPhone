@@ -23,7 +23,7 @@ class SavedRepositoriesViewModel @Inject constructor(private val dataRepository:
     val repositoryListLiveData: LiveData<SingleEvent<List<GitRepository>>>
         get() = _repositoryListLiveData
 
-    fun fetchSavedRepositories(repository: GitRepository) {
+    fun fetchSavedRepositories() {
         viewModelScope.launch {
             val dataLoadState = dataRepository.fetchAllSavedRepositories()
 

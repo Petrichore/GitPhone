@@ -11,9 +11,7 @@ import com.bumptech.glide.Glide
 import com.stefanenko.gitphone.R
 import com.stefanenko.gitphone.data.dto.gitRepository.GitRepository
 import com.stefanenko.gitphone.ui.ViewModelFactory
-import com.stefanenko.gitphone.ui.base.BaseFragment
 import com.stefanenko.gitphone.ui.base.BaseObserveFragment
-import com.stefanenko.gitphone.ui.base.decorators.HorizontalItemDecoration
 import com.stefanenko.gitphone.ui.base.decorators.VerticalItemDecoration
 import com.stefanenko.gitphone.ui.fragment.repositoryList.recycler.AdapterRepositoryList
 import com.stefanenko.gitphone.util.toDp
