@@ -40,4 +40,10 @@ class DataRepository @Inject constructor(
             ), repositoryOwner.toUser()
         )
     }
+
+    suspend fun deleteGitRepository(
+        repoId: Long
+    ): DataResponseState<Boolean> {
+        return databaseService.deleteGitRepository(repoId)
+    }
 }

@@ -26,6 +26,10 @@ class SavedRepositoriesViewModel @Inject constructor(private val dataRepository:
     val repositoryListLiveData: LiveData<SingleEvent<List<RepositoryWithOwner>>>
         get() = _repositoryListLiveData
 
+    private val _repoDeleteResponse = MutableLiveData<Long>()
+    val repoDeleteResponse: LiveData<Long>
+        get() = _repoDeleteResponse
+
     fun fetchSavedRepositoriesWithUser() {
         viewModelScope.launch {
             val dataLoadState = dataRepository.getSavedRepositoriesWithUser()
@@ -35,6 +39,22 @@ class SavedRepositoriesViewModel @Inject constructor(private val dataRepository:
                     val repositoryOwnerList = dataLoadState.data
                     _repositoryListLiveData.value =
                         SingleEvent(repositoryOwnerList.toRepositoryWithOwnerList())
+                }
+
+                is DataResponseState.Error -> {
+                    _loadErrorLiveData.value = SingleEvent(dataLoadState.error)
+                }
+            }
+        }
+    }
+
+    fun deleteSavedRepository(repoId: Long) {
+        viewModelScope.launch {
+            val dataLoadState = dataRepository.deleteGitRepository(repoId)
+
+            when (dataLoadState) {
+                is DataResponseState.Data -> {
+                    _repoDeleteResponse.value = repoId
                 }
 
                 is DataResponseState.Error -> {

@@ -1,12 +1,12 @@
 package com.stefanenko.gitphone.domain
 
-import android.util.Log
 import com.stefanenko.gitphone.data.database.dao.GitRepositoryDao
 import com.stefanenko.gitphone.data.database.entity.Repository
 import com.stefanenko.gitphone.data.database.entity.User
 import com.stefanenko.gitphone.data.dto.DataResponseState
-import com.stefanenko.gitphone.data.dto.gitRepository.GitRepository
 import com.stefanenko.gitphone.domain.entity.RepositoryOwner
+import com.stefanenko.gitphone.util.exception.DataBaseExceptionConstantStorage.DELETE_ERROR
+import com.stefanenko.gitphone.util.exception.DataBaseExceptionConstantStorage.DELETE_ERROR_UNMATCHED_ID
 import com.stefanenko.gitphone.util.exception.DataBaseExceptionConstantStorage.INSERT_ERROR
 import com.stefanenko.gitphone.util.exception.DataBaseExceptionConstantStorage.NO_SUCH_USER_IN_DATABASE
 import com.stefanenko.gitphone.util.exception.DataExceptionConstantStorage.INVALID_STATE
@@ -69,6 +69,22 @@ class DatabaseService @Inject constructor(private val gitRepositoryDao: GitRepos
         }
     }
 
+    suspend fun deleteGitRepository(repoId: Long): DataResponseState<Boolean>{
+        return withContext(Dispatchers.IO){
+            try {
+                val deleteId = gitRepositoryDao.deleteGitRepository(repoId)
+                if(deleteId == repoId){
+                    DataResponseState.Data(true)
+                }else{
+                    DataResponseState.Error(DELETE_ERROR_UNMATCHED_ID)
+                }
+            }catch(e: Exception){
+                e.printStackTrace()
+                DataResponseState.Error(DELETE_ERROR)
+            }
+        }
+    }
+
 
     private suspend fun insertNewUser(user: User): DataResponseState<Boolean> {
         return withContext(Dispatchers.IO) {
@@ -86,20 +102,7 @@ class DatabaseService @Inject constructor(private val gitRepositoryDao: GitRepos
         }
     }
 
-    suspend fun getAllRepositories(): DataResponseState<List<GitRepository>> {
-        return withContext(Dispatchers.IO) {
-            try {
-                val databaseResponse = gitRepositoryDao.getRepositories()
-                Log.d("database response:", "$databaseResponse")
-                DataResponseState.Data(arrayListOf())
-            } catch (e: Exception) {
-                e.printStackTrace()
-                DataResponseState.Error("Database error")
-            }
-        }
-    }
-
-    suspend fun getUserById(id: Long): DataResponseState<User> {
+    private suspend fun getUserById(id: Long): DataResponseState<User> {
         return withContext(Dispatchers.IO) {
             try {
                 val user = gitRepositoryDao.getUserById(id)

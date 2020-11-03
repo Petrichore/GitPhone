@@ -13,9 +13,6 @@ interface GitRepositoryDao {
     @Query("select * from User")
     suspend fun getUserWithRepositories(): List<UserWithRepo>
 
-    @Query("select * from Repository")
-    suspend fun getRepositories(): List<Repository>
-
     @Query("select * from User where id_user == :id")
     suspend fun getUserById(id: Long): User?
 
@@ -24,4 +21,8 @@ interface GitRepositoryDao {
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun insertNewUser(user: User): Long
+
+    @Query("delete from Repository where id_repository = :repoId")
+    suspend fun deleteGitRepository(repoId: Long): Long
+
 }

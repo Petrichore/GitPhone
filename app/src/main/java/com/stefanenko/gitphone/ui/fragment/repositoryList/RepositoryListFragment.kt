@@ -41,7 +41,7 @@ class RepositoryListFragment : BaseObserveFragment() {
     override fun observeViewModel() {
         viewModel.successResponseLiveData.observe(viewLifecycleOwner, { singleEvent ->
             singleEvent.handleEvent {
-                motionLayout.transitionToEnd()
+                //TODO show fill star
                 showDebugLog("Data have added")
             }
         })
@@ -91,25 +91,6 @@ class RepositoryListFragment : BaseObserveFragment() {
             }
             addItemDecoration(VerticalItemDecoration(16.toDp()))
         }
-    }
-
-    private fun showAlertDialog(
-        title: String,
-        message: String,
-        positiveAction: (dialog: DialogInterface) -> Unit,
-        negativeAction: (dialog: DialogInterface) -> Unit
-    ) {
-        AlertDialog.Builder(context)
-            .setTitle(title)
-            .setMessage(message)
-            .setPositiveButton("Ok") { dialog, _ ->
-                positiveAction.invoke(dialog)
-            }
-            .setNegativeButton("Cancel") { dialog, _ ->
-                negativeAction.invoke(dialog)
-            }
-            .create()
-            .show()
     }
 
     override fun setListeners() {}

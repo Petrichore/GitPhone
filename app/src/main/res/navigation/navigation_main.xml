@@ -7,18 +7,18 @@
 
     <fragment
         android:id="@+id/repositoryListFragment"
-        tools:layout="@layout/fragment_repositories"
         android:name="com.stefanenko.gitphone.ui.fragment.repositoryList.RepositoryListFragment"
-        android:label="RepositoryListFragment" >
+        android:label="RepositoryListFragment"
+        tools:layout="@layout/fragment_repositories">
         <argument
             android:name="userRepositories"
             app:argType="com.stefanenko.gitphone.domain.entity.RepositoryOwner" />
     </fragment>
     <fragment
         android:id="@+id/startScreenFragment"
-        tools:layout="@layout/fragment_start_screen"
         android:name="com.stefanenko.gitphone.ui.fragment.start.StartScreenFragment"
-        android:label="StartScreenFragment" >
+        android:label="StartScreenFragment"
+        tools:layout="@layout/fragment_start_screen">
         <action
             android:id="@+id/action_startScreenFragment_to_repositoryListFragment"
             app:destination="@id/repositoryListFragment" />
@@ -28,11 +28,16 @@
     </fragment>
     <fragment
         android:id="@+id/emptyRepo"
-        tools:layout="@layout/fragment_repositories_empty"
         android:name="com.stefanenko.gitphone.ui.fragment.repositoryList.EmptyRepositoriesFragment"
-        android:label="EmptyRepo" >
+        android:label="EmptyRepo"
+        tools:layout="@layout/fragment_repositories_empty">
         <argument
             android:name="username"
             app:argType="string" />
     </fragment>
+    <fragment
+        android:id="@+id/emptySavedRepositoriesFragment"
+        android:name="com.stefanenko.gitphone.ui.fragment.savedRepositories.EmptySavedRepositoriesFragment"
+        android:label="EmptySavedRepositoriesFragment"
+        tools:layout="@layout/fragment_saved_repository_empty" />
 </navigation>

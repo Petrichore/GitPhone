@@ -2,6 +2,7 @@ package com.stefanenko.gitphone.ui.fragment.savedRepositories
 
 import android.util.Log
 import androidx.lifecycle.ViewModelProvider
+import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.stefanenko.gitphone.R
@@ -39,15 +40,19 @@ class SavedRepositoriesFragment : BaseObserveFragment() {
             singleEvent.handleEvent {
                 Log.d("listUpdates", "$it")
                 if (it.isNotEmpty()) {
-                    if(::recyclerSavedRepo.isInitialized){
+                    if (::recyclerSavedRepo.isInitialized) {
                         adapterSavedRepoList.onDataSetChanged(it)
-                    }else{
+                    } else {
                         initRecycler(it)
                     }
-                }else{
-                    //TODO navigate to empty page
+                } else {
+                    findNavController().navigate(R.id.emptySavedRepositoriesFragment)
                 }
             }
+        })
+
+        viewModel.repoDeleteResponse.observe(viewLifecycleOwner, { deletedRepoId ->
+
         })
 
         viewModel.loadErrorLiveData.observe(viewLifecycleOwner, { singleEvent ->
@@ -62,8 +67,17 @@ class SavedRepositoriesFragment : BaseObserveFragment() {
             layoutManager = LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false)
             addItemDecoration(VerticalItemDecoration(16.toDp()))
 
-            adapterSavedRepoList = AdapterSavedRepositoryList(itemList) {
-                //TODO implements onStarClickListener - delete repo from database
+            adapterSavedRepoList = AdapterSavedRepositoryList(itemList) { repository ->
+                showAlertDialog(
+                    "Delete repository",
+                    "Are you sure you want to delete this repository from cache?",
+                    {
+                        viewModel.deleteSavedRepository(repository.repoId)
+                        it.dismiss()
+                    },
+                    {
+                        it.dismiss()
+                    })
             }
 
             adapter = adapterSavedRepoList
