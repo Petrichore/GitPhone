@@ -82,7 +82,7 @@ class RepositoryListFragment : BaseObserveFragment() {
                     { dialog ->
                         viewModel.saveRepository(
                             it,
-                            RepositoryListFragmentArgs.fromBundle(requireArguments()).userRepositories.userId
+                            RepositoryListFragmentArgs.fromBundle(requireArguments()).userRepositories.ownerId
                         )
                         dialog.dismiss()
                     }, { dialog ->

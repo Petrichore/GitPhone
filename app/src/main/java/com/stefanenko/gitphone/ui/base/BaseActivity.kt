@@ -16,7 +16,6 @@ abstract class BaseActivity : AppCompatActivity() {
         val layoutId = getContentLayoutId()
         setContentView(layoutId)
 
-        initViewModel()
         Log.e("onCreate", this.javaClass.name)
     }
 
@@ -33,5 +32,4 @@ abstract class BaseActivity : AppCompatActivity() {
     }
 
     abstract fun getContentLayoutId(): Int
-    abstract fun initViewModel()
 }

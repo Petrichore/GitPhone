@@ -2,6 +2,7 @@ package com.stefanenko.gitphone.ui.fragment.start
 
 import android.os.Bundle
 import android.view.View
+import androidx.activity.OnBackPressedCallback
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
 import com.google.android.material.tabs.TabLayoutMediator
@@ -21,6 +22,19 @@ class StartScreenFragment : BaseFragment() {
         TabLayoutMediator(tabLayout, fragmentViewPager) { tab, position ->
             tab.text = if (position == 0) "Git" else "Saved repositories"
         }.attach()
+
+        defineObBackPressCallBack()
+    }
+
+    private fun defineObBackPressCallBack() {
+        val onBackPressCallBack = object : OnBackPressedCallback(true) {
+            override fun handleOnBackPressed() {
+                if (fragmentViewPager.currentItem != 1) {
+                    fragmentViewPager.currentItem -= 1
+                }
+            }
+        }
+        requireActivity().onBackPressedDispatcher.addCallback(viewLifecycleOwner, onBackPressCallBack)
     }
 
     override fun setListeners() {}

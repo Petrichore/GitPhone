@@ -5,10 +5,11 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.stefanenko.gitphone.R
 import com.stefanenko.gitphone.data.dto.gitRepository.GitRepository
+import com.stefanenko.gitphone.domain.entity.RepositoryWithOwner
 
 class AdapterSavedRepositoryList(
-    private val itemList: List<GitRepository>,
-    private val onStarClickListener: (GitRepository) -> Unit
+    private var itemList: List<RepositoryWithOwner>,
+    private val onStarClickListener: (RepositoryWithOwner) -> Unit
 ): RecyclerView.Adapter<SavedRepositoryViewHolder>() {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): SavedRepositoryViewHolder {
@@ -21,4 +22,9 @@ class AdapterSavedRepositoryList(
     }
 
     override fun getItemCount(): Int = itemList.size
+
+    fun onDataSetChanged(nItemList: List<RepositoryWithOwner>){
+        itemList = nItemList
+        notifyDataSetChanged()
+    }
 }

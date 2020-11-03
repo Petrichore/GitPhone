@@ -5,7 +5,7 @@ import kotlinx.android.parcel.Parcelize
 
 @Parcelize
 data class RepositoryOwner(
-    val userId: Long,
+    val ownerId: Long,
 
     val name: String,
 

@@ -1,10 +1,11 @@
 package com.stefanenko.gitphone.ui.fragment.savedRepositories
 
+import android.util.Log
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import com.stefanenko.gitphone.R
-import com.stefanenko.gitphone.data.dto.gitRepository.GitRepository
-import com.stefanenko.gitphone.domain.entity.RepositoryOwner
+import com.stefanenko.gitphone.domain.entity.RepositoryWithOwner
 import com.stefanenko.gitphone.ui.ViewModelFactory
 import com.stefanenko.gitphone.ui.base.BaseObserveFragment
 import com.stefanenko.gitphone.ui.base.decorators.VerticalItemDecoration
@@ -20,6 +21,9 @@ class SavedRepositoriesFragment : BaseObserveFragment() {
     lateinit var viewModelFactory: ViewModelFactory
     private lateinit var viewModel: SavedRepositoriesViewModel
 
+    private lateinit var recyclerSavedRepo: RecyclerView
+    private lateinit var adapterSavedRepoList: AdapterSavedRepositoryList
+
     override fun initViewModel() {
         viewModel =
             ViewModelProvider(this, viewModelFactory)[SavedRepositoriesViewModel::class.java]
@@ -33,8 +37,15 @@ class SavedRepositoriesFragment : BaseObserveFragment() {
     override fun observeViewModel() {
         viewModel.repositoryListLiveData.observe(viewLifecycleOwner, { singleEvent ->
             singleEvent.handleEvent {
+                Log.d("listUpdates", "$it")
                 if (it.isNotEmpty()) {
-                    initRecycler(it)
+                    if(::recyclerSavedRepo.isInitialized){
+                        adapterSavedRepoList.onDataSetChanged(it)
+                    }else{
+                        initRecycler(it)
+                    }
+                }else{
+                    //TODO navigate to empty page
                 }
             }
         })
@@ -46,14 +57,16 @@ class SavedRepositoriesFragment : BaseObserveFragment() {
         })
     }
 
-    private fun initRecycler(itemList: List<RepositoryOwner>) {
-        with(savedRepoRecycler) {
-            layoutManager = LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false)
+    private fun initRecycler(itemList: List<RepositoryWithOwner>) {
+        recyclerSavedRepo = savedRepoRecycler.apply {
+            layoutManager = LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false)
             addItemDecoration(VerticalItemDecoration(16.toDp()))
-            //TODO change to suitable list
-            adapter = AdapterSavedRepositoryList(itemList) {
+
+            adapterSavedRepoList = AdapterSavedRepositoryList(itemList) {
                 //TODO implements onStarClickListener - delete repo from database
             }
+
+            adapter = adapterSavedRepoList
         }
     }
 

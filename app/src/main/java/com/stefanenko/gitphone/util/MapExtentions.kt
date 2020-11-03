@@ -6,6 +6,7 @@ import com.stefanenko.gitphone.data.database.entity.UserWithRepo
 import com.stefanenko.gitphone.data.dto.gitRepository.GitRepository
 import com.stefanenko.gitphone.domain.entity.RepositoryLocal
 import com.stefanenko.gitphone.domain.entity.RepositoryOwner
+import com.stefanenko.gitphone.domain.entity.RepositoryWithOwner
 
 
 fun List<GitRepository>.toRepositoryOwner(): RepositoryOwner {
@@ -32,7 +33,7 @@ fun RepositoryLocal.toRepository(userId: Long): Repository {
 }
 
 fun RepositoryOwner.toUser(): User {
-    return User(userId, name, imageUrl)
+    return User(ownerId, name, imageUrl)
 }
 
 fun UserWithRepo.toRepositoryOwner(): RepositoryOwner {
@@ -50,4 +51,27 @@ fun UserWithRepo.toRepositoryOwner(): RepositoryOwner {
         )
     }
     return RepositoryOwner(user.userId, user.name, user.image, localRepositoryList)
+}
+
+fun List<RepositoryOwner>.toRepositoryWithOwnerList(): List<RepositoryWithOwner> {
+    val repositoryWithOwnerList = mutableListOf<RepositoryWithOwner>()
+
+    forEach {repoOwner->
+        repoOwner.repositoryList.forEach {
+            repositoryWithOwnerList.add(
+                RepositoryWithOwner(
+                    repoOwner.ownerId,
+                    repoOwner.name,
+                    repoOwner.imageUrl,
+                    it.repoId,
+                    it.name,
+                    it.language,
+                    it.description,
+                    it.isCached
+                )
+            )
+        }
+    }
+
+    return repositoryWithOwnerList
 }

@@ -10,6 +10,8 @@
 
 <!--    TextView-->
     <string name="text_no_repositories_yet">has not created any repositories yet</string>
+    <string name="text_no_saved_repositories_yet">You have not saved any repositories yet</string>
+    <string name="text_support_no_saved_repositories_yet">Press on the star in repository list to save one locally</string>
 
 
 </resources>

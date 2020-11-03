@@ -8,7 +8,9 @@ import com.stefanenko.gitphone.data.dto.DataResponseState
 import com.stefanenko.gitphone.data.dto.gitRepository.GitRepository
 import com.stefanenko.gitphone.domain.DataRepository
 import com.stefanenko.gitphone.domain.entity.RepositoryOwner
+import com.stefanenko.gitphone.domain.entity.RepositoryWithOwner
 import com.stefanenko.gitphone.ui.singleEvent.SingleEvent
+import com.stefanenko.gitphone.util.toRepositoryWithOwnerList
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -20,8 +22,8 @@ class SavedRepositoriesViewModel @Inject constructor(private val dataRepository:
         get() = _loadErrorLiveData
 
     private val _repositoryListLiveData =
-        MutableLiveData<SingleEvent<List<RepositoryOwner>>>()
-    val repositoryListLiveData: LiveData<SingleEvent<List<RepositoryOwner>>>
+        MutableLiveData<SingleEvent<List<RepositoryWithOwner>>>()
+    val repositoryListLiveData: LiveData<SingleEvent<List<RepositoryWithOwner>>>
         get() = _repositoryListLiveData
 
     fun fetchSavedRepositoriesWithUser() {
@@ -30,7 +32,9 @@ class SavedRepositoriesViewModel @Inject constructor(private val dataRepository:
 
             when (dataLoadState) {
                 is DataResponseState.Data -> {
-                    _repositoryListLiveData.value = SingleEvent(dataLoadState.data)
+                    val repositoryOwnerList = dataLoadState.data
+                    _repositoryListLiveData.value =
+                        SingleEvent(repositoryOwnerList.toRepositoryWithOwnerList())
                 }
 
                 is DataResponseState.Error -> {

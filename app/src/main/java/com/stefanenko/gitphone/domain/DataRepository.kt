@@ -1,7 +1,6 @@
 package com.stefanenko.gitphone.domain
 
 import com.stefanenko.gitphone.data.dto.DataResponseState
-import com.stefanenko.gitphone.data.dto.gitRepository.GitRepository
 import com.stefanenko.gitphone.domain.entity.RepositoryLocal
 import com.stefanenko.gitphone.domain.entity.RepositoryOwner
 import com.stefanenko.gitphone.util.toRepository
@@ -37,7 +36,7 @@ class DataRepository @Inject constructor(
     ): DataResponseState<Boolean> {
         return databaseService.addRepositoryOwnerAndCacheRepository(
             localRepository.toRepository(
-                repositoryOwner.userId
+                repositoryOwner.ownerId
             ), repositoryOwner.toUser()
         )
     }
