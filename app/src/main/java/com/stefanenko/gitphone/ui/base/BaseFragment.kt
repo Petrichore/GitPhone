@@ -59,4 +59,24 @@ abstract class BaseFragment: Fragment() {
             .create()
             .show()
     }
+
+    override fun onPause() {
+        super.onPause()
+        showDebugLog("OnPause")
+    }
+
+    override fun onStop() {
+        super.onStop()
+        showDebugLog("OnStop")
+    }
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+        showDebugLog("OnDestroyView")
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        showDebugLog("OnDestroy")
+    }
 }

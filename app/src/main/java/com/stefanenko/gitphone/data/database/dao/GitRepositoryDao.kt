@@ -23,6 +23,6 @@ interface GitRepositoryDao {
     suspend fun insertNewUser(user: User): Long
 
     @Query("delete from Repository where id_repository = :repoId")
-    suspend fun deleteGitRepository(repoId: Long): Long
+    suspend fun deleteGitRepository(repoId: Long)
 
 }

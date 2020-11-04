@@ -40,4 +40,15 @@
         android:name="com.stefanenko.gitphone.ui.fragment.savedRepositories.EmptySavedRepositoriesFragment"
         android:label="EmptySavedRepositoriesFragment"
         tools:layout="@layout/fragment_saved_repository_empty" />
+    <fragment
+        android:id="@+id/savedRepositoriesFragment"
+        tools:layout="@layout/item_saved_repository"
+        android:name="com.stefanenko.gitphone.ui.fragment.savedRepositories.SavedRepositoriesFragment"
+        android:label="SavedRepositoriesFragment" >
+        <action
+            android:id="@+id/action_savedRepositoriesFragment_to_emptySavedRepositoriesFragment"
+            app:destination="@id/emptySavedRepositoriesFragment"
+            app:popUpTo="@id/savedRepositoriesFragment"
+            app:popUpToInclusive="true" />
+    </fragment>
 </navigation>

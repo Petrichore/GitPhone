@@ -69,15 +69,11 @@ class DatabaseService @Inject constructor(private val gitRepositoryDao: GitRepos
         }
     }
 
-    suspend fun deleteGitRepository(repoId: Long): DataResponseState<Boolean>{
+    suspend fun deleteGitRepository(repoId: Long): DataResponseState<List<RepositoryOwner>>{
         return withContext(Dispatchers.IO){
             try {
                 val deleteId = gitRepositoryDao.deleteGitRepository(repoId)
-                if(deleteId == repoId){
-                    DataResponseState.Data(true)
-                }else{
-                    DataResponseState.Error(DELETE_ERROR_UNMATCHED_ID)
-                }
+                getAllRepositoriesWithUsers()
             }catch(e: Exception){
                 e.printStackTrace()
                 DataResponseState.Error(DELETE_ERROR)

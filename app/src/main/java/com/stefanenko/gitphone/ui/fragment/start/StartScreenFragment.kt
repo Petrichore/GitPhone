@@ -18,7 +18,7 @@ class StartScreenFragment : BaseFragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        fragmentViewPager.adapter = FragmentCollectionAdapter(this)
+        fragmentViewPager.adapter = FragmentCollectionAdapter(requireActivity().supportFragmentManager, lifecycle)
         TabLayoutMediator(tabLayout, fragmentViewPager) { tab, position ->
             tab.text = if (position == 0) "Git" else "Saved repositories"
         }.attach()

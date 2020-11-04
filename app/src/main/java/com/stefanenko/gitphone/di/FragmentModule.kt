@@ -3,6 +3,7 @@ package com.stefanenko.gitphone.di
 import com.stefanenko.gitphone.ui.fragment.enterToRepository.GitUsernameFragment
 import com.stefanenko.gitphone.ui.fragment.repositoryList.EmptyRepositoriesFragment
 import com.stefanenko.gitphone.ui.fragment.repositoryList.RepositoryListFragment
+import com.stefanenko.gitphone.ui.fragment.savedRepositories.EmptySavedRepositoriesFragment
 import com.stefanenko.gitphone.ui.fragment.savedRepositories.SavedRepositoriesFragment
 import com.stefanenko.gitphone.ui.fragment.start.StartScreenFragment
 import dagger.Module
@@ -25,4 +26,7 @@ abstract class FragmentModule {
 
     @ContributesAndroidInjector()
     abstract fun provideGitUsernameFragment(): GitUsernameFragment
+
+    @ContributesAndroidInjector()
+    abstract fun provideEmptySavedRepositoryFragment(): EmptySavedRepositoriesFragment
 }

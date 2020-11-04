@@ -1,8 +1,8 @@
 package com.stefanenko.gitphone.ui.fragment.savedRepositories
 
 import android.util.Log
+import android.view.View
 import androidx.lifecycle.ViewModelProvider
-import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.stefanenko.gitphone.R
@@ -16,7 +16,6 @@ import kotlinx.android.synthetic.main.fragment_repositories_list_cache.*
 import javax.inject.Inject
 
 class SavedRepositoriesFragment : BaseObserveFragment() {
-    override fun getLayoutId(): Int = R.layout.fragment_repositories_list_cache
 
     @Inject
     lateinit var viewModelFactory: ViewModelFactory
@@ -24,6 +23,10 @@ class SavedRepositoriesFragment : BaseObserveFragment() {
 
     private lateinit var recyclerSavedRepo: RecyclerView
     private lateinit var adapterSavedRepoList: AdapterSavedRepositoryList
+
+    override fun getLayoutId(): Int = R.layout.fragment_repositories_list_cache
+
+    override fun setListeners() {}
 
     override fun initViewModel() {
         viewModel =
@@ -36,24 +39,34 @@ class SavedRepositoriesFragment : BaseObserveFragment() {
     }
 
     override fun observeViewModel() {
-        viewModel.repositoryListLiveData.observe(viewLifecycleOwner, { singleEvent ->
-            singleEvent.handleEvent {
-                Log.d("listUpdates", "$it")
-                if (it.isNotEmpty()) {
-                    if (::recyclerSavedRepo.isInitialized) {
-                        adapterSavedRepoList.onDataSetChanged(it)
-                    } else {
-                        initRecycler(it)
-                    }
+        viewModel.repositoryListLiveData.observe(viewLifecycleOwner, { itemList ->
+            Log.d("listUpdates", "$itemList")
+            if (itemList.isNotEmpty()) {
+                if (::recyclerSavedRepo.isInitialized) {
+                    if (childFragmentManager.fragments.size != 0) deleteEmptyFragment()
+                    adapterSavedRepoList.onDataSetChanged(itemList)
                 } else {
-                    findNavController().navigate(R.id.emptySavedRepositoriesFragment)
+                    initRecycler(itemList)
                 }
+            } else {
+                childFragmentManager.beginTransaction()
+                    .replace(R.id.fragmentContainer, EmptySavedRepositoriesFragment()).commit()
             }
         })
 
         viewModel.repoDeleteResponse.observe(viewLifecycleOwner, { deletedRepoId ->
-
+            Log.d("Deleted repo id", "$deletedRepoId")
         })
+
+//        viewModel.inProgress.observe(viewLifecycleOwner, {
+//            if (it) {
+//                progressBar.visibility = View.VISIBLE
+//                inProgressView.visibility = View.VISIBLE
+//            } else {
+//                progressBar.visibility = View.GONE
+//                inProgressView.visibility = View.GONE
+//            }
+//        })
 
         viewModel.loadErrorLiveData.observe(viewLifecycleOwner, { singleEvent ->
             singleEvent.handleEvent {
@@ -84,5 +97,9 @@ class SavedRepositoriesFragment : BaseObserveFragment() {
         }
     }
 
-    override fun setListeners() {}
+    private fun deleteEmptyFragment() {
+        childFragmentManager.fragments.forEach {
+            childFragmentManager.beginTransaction().remove(it).commit()
+        }
+    }
 }

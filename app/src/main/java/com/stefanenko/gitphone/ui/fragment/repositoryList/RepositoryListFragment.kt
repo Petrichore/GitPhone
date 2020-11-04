@@ -41,7 +41,6 @@ class RepositoryListFragment : BaseObserveFragment() {
     override fun observeViewModel() {
         viewModel.successResponseLiveData.observe(viewLifecycleOwner, { singleEvent ->
             singleEvent.handleEvent {
-                //TODO show fill star
                 showDebugLog("Data have added")
             }
         })

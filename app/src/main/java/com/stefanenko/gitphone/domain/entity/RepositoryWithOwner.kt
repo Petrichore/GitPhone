@@ -1,5 +1,7 @@
 package com.stefanenko.gitphone.domain.entity
 
+import java.io.Serializable
+
 data class RepositoryWithOwner(
     val ownerId: Long,
 
@@ -16,4 +18,4 @@ data class RepositoryWithOwner(
     val description: String,
 
     var isCached: Boolean
-)
+) : Serializable

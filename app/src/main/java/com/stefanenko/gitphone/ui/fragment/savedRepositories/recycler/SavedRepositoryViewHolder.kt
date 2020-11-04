@@ -32,7 +32,7 @@ class SavedRepositoryViewHolder(
         }
 
         view.fillStar.setOnClickListener {
-            onStarClickListener.invoke(item)
+            onStarClickListener.invoke(item, )
         }
     }
 }

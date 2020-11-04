@@ -10,7 +10,7 @@ import com.stefanenko.gitphone.ui.base.BaseActivity
 
 class MainActivity: BaseActivity() {
 
-    private lateinit var navController: NavController
+    lateinit var navController: NavController
 
     override fun getContentLayoutId(): Int = R.layout.activity_main
 

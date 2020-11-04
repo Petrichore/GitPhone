@@ -2,18 +2,19 @@ package com.stefanenko.gitphone.ui.fragment.savedRepositories.recycler
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
+import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
 import com.stefanenko.gitphone.R
-import com.stefanenko.gitphone.data.dto.gitRepository.GitRepository
 import com.stefanenko.gitphone.domain.entity.RepositoryWithOwner
 
 class AdapterSavedRepositoryList(
     private var itemList: List<RepositoryWithOwner>,
     private val onStarClickListener: (RepositoryWithOwner) -> Unit
-): RecyclerView.Adapter<SavedRepositoryViewHolder>() {
+) : RecyclerView.Adapter<SavedRepositoryViewHolder>() {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): SavedRepositoryViewHolder {
-        val view = LayoutInflater.from(parent.context).inflate(R.layout.item_saved_repository, parent, false)
+        val view = LayoutInflater.from(parent.context)
+            .inflate(R.layout.item_saved_repository, parent, false)
         return SavedRepositoryViewHolder(view, onStarClickListener)
     }
 
@@ -23,8 +24,9 @@ class AdapterSavedRepositoryList(
 
     override fun getItemCount(): Int = itemList.size
 
-    fun onDataSetChanged(nItemList: List<RepositoryWithOwner>){
+    fun onDataSetChanged(nItemList: List<RepositoryWithOwner>) {
+        val diffUtilResult = DiffUtil.calculateDiff(DiffUtilSavedRepoCallBack(itemList, nItemList))
         itemList = nItemList
-        notifyDataSetChanged()
+        diffUtilResult.dispatchUpdatesTo(this)
     }
 }
