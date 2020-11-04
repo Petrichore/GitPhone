@@ -8,8 +8,8 @@ import com.stefanenko.gitphone.data.dto.gitRepository.GitRepository
 import com.stefanenko.gitphone.domain.entity.RepositoryLocal
 
 class AdapterRepositoryList(
-    private val itemList: List<RepositoryLocal>,
-    private val onStarClickListener: (RepositoryLocal) -> Unit
+    private val itemList: List<com.stefanenko.gitphone.domain.entity.RepositoryLocal>,
+    private val onStarClickListener: (com.stefanenko.gitphone.domain.entity.RepositoryLocal) -> Unit
 ): RecyclerView.Adapter<RepositoryViewHolder>() {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RepositoryViewHolder {

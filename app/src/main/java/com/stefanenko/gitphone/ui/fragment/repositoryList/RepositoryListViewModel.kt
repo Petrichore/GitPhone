@@ -4,16 +4,12 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.stefanenko.gitphone.data.dto.DataResponseState
-import com.stefanenko.gitphone.domain.DataRepository
-import com.stefanenko.gitphone.domain.entity.RepositoryLocal
-import com.stefanenko.gitphone.domain.entity.RepositoryOwner
+import com.stefanenko.gitphone.data.exception.DataBaseExceptionConstantStorage.NO_SUCH_USER_IN_DATABASE
 import com.stefanenko.gitphone.ui.singleEvent.SingleEvent
-import com.stefanenko.gitphone.util.exception.DataBaseExceptionConstantStorage.NO_SUCH_USER_IN_DATABASE
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
-class RepositoryListViewModel @Inject constructor(private val dataRepository: DataRepository) :
+class RepositoryListViewModel @Inject constructor(private val dataRepository: com.stefanenko.gitphone.domain.DataRepository) :
     ViewModel() {
 
     private val _errorLiveData = MutableLiveData<SingleEvent<String>>()
@@ -25,20 +21,20 @@ class RepositoryListViewModel @Inject constructor(private val dataRepository: Da
         get() = _successResponseLiveData
 
     private val _noOwnersForSavingRepository =
-        MutableLiveData<SingleEvent<Pair<RepositoryLocal, String>>>()
-    val noOwnersForSavingRepository: LiveData<SingleEvent<Pair<RepositoryLocal, String>>>
+        MutableLiveData<SingleEvent<Pair<com.stefanenko.gitphone.domain.entity.RepositoryLocal, String>>>()
+    val noOwnersForSavingRepository: LiveData<SingleEvent<Pair<com.stefanenko.gitphone.domain.entity.RepositoryLocal, String>>>
         get() = _noOwnersForSavingRepository
 
-    fun saveRepository(repository: RepositoryLocal, userId: Long) {
+    fun saveRepository(repository: com.stefanenko.gitphone.domain.entity.RepositoryLocal, userId: Long) {
         viewModelScope.launch {
             val dataResponseState = dataRepository.insertNewRepository(repository, userId)
 
             when (dataResponseState) {
-                is DataResponseState.Data -> {
+                is com.stefanenko.gitphone.data.dto.DataResponseState.Data -> {
                     _successResponseLiveData.value = SingleEvent(dataResponseState.data)
                 }
 
-                is DataResponseState.Error -> {
+                is com.stefanenko.gitphone.data.dto.DataResponseState.Error -> {
                     when (dataResponseState.error) {
                         NO_SUCH_USER_IN_DATABASE -> {
                             _noOwnersForSavingRepository.value =
@@ -56,16 +52,16 @@ class RepositoryListViewModel @Inject constructor(private val dataRepository: Da
         }
     }
 
-    fun addOwnerAndSavedRepository(repository: RepositoryLocal, repositoryOwner: RepositoryOwner) {
+    fun addOwnerAndSavedRepository(repository: com.stefanenko.gitphone.domain.entity.RepositoryLocal, repositoryOwner: com.stefanenko.gitphone.domain.entity.RepositoryOwner) {
         viewModelScope.launch {
             val dataResponseState = dataRepository.insertNewRepository(repository, repositoryOwner)
 
             when (dataResponseState) {
-                is DataResponseState.Data -> {
+                is com.stefanenko.gitphone.data.dto.DataResponseState.Data -> {
                     _successResponseLiveData.value = SingleEvent(dataResponseState.data)
                 }
 
-                is DataResponseState.Error -> {
+                is com.stefanenko.gitphone.data.dto.DataResponseState.Error -> {
                     _errorLiveData.value = SingleEvent(dataResponseState.error)
                 }
             }

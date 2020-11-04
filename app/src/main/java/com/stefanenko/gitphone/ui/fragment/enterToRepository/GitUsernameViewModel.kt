@@ -4,20 +4,17 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.stefanenko.gitphone.data.dto.DataResponseState
-import com.stefanenko.gitphone.domain.DataRepository
-import com.stefanenko.gitphone.domain.entity.RepositoryOwner
+import com.stefanenko.gitphone.data.exception.NetworkExceptionConstantStorage.DATA_EMPTY_BODY
 import com.stefanenko.gitphone.ui.singleEvent.SingleEvent
-import com.stefanenko.gitphone.util.exception.NetworkExceptionConstantStorage.DATA_EMPTY_BODY
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
-class GitUsernameViewModel @Inject constructor(private val repository: DataRepository) :
+class GitUsernameViewModel @Inject constructor(private val repository: com.stefanenko.gitphone.domain.DataRepository) :
     ViewModel() {
 
     private val _userRepositoriesLiveData =
-        MutableLiveData<SingleEvent<RepositoryOwner>>()
-    val userRepositoriesLiveData: LiveData<SingleEvent<RepositoryOwner>>
+        MutableLiveData<SingleEvent<com.stefanenko.gitphone.domain.entity.RepositoryOwner>>()
+    val userRepositoriesLiveData: LiveData<SingleEvent<com.stefanenko.gitphone.domain.entity.RepositoryOwner>>
         get() = _userRepositoriesLiveData
 
     private val _validationErrorLiveData = MutableLiveData<SingleEvent<String>>()
@@ -38,11 +35,11 @@ class GitUsernameViewModel @Inject constructor(private val repository: DataRepos
             viewModelScope.launch {
                 val dataLoadState = repository.getUserGitRepositories(username)
                 when (dataLoadState) {
-                    is DataResponseState.Data -> {
+                    is com.stefanenko.gitphone.data.dto.DataResponseState.Data -> {
                         _userRepositoriesLiveData.value = SingleEvent((dataLoadState.data))
                     }
 
-                    is DataResponseState.Error -> {
+                    is com.stefanenko.gitphone.data.dto.DataResponseState.Error -> {
                         when (dataLoadState.error) {
                             DATA_EMPTY_BODY -> {
                                 _navigateToEmptyScreen.value = SingleEvent(username)

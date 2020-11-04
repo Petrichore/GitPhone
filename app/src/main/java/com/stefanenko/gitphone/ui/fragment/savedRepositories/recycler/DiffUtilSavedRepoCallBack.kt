@@ -4,8 +4,8 @@ import androidx.recyclerview.widget.DiffUtil
 import com.stefanenko.gitphone.domain.entity.RepositoryWithOwner
 
 class DiffUtilSavedRepoCallBack(
-    private val oldItemList: List<RepositoryWithOwner>,
-    private val newItemList: List<RepositoryWithOwner>
+    private val oldItemList: List<com.stefanenko.gitphone.domain.entity.RepositoryWithOwner>,
+    private val newItemList: List<com.stefanenko.gitphone.domain.entity.RepositoryWithOwner>
 ) : DiffUtil.Callback() {
 
     override fun getOldListSize(): Int = oldItemList.size

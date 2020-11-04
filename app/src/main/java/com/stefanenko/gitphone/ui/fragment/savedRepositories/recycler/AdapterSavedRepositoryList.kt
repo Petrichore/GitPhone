@@ -8,8 +8,8 @@ import com.stefanenko.gitphone.R
 import com.stefanenko.gitphone.domain.entity.RepositoryWithOwner
 
 class AdapterSavedRepositoryList(
-    private var itemList: List<RepositoryWithOwner>,
-    private val onStarClickListener: (RepositoryWithOwner) -> Unit
+    private var itemList: List<com.stefanenko.gitphone.domain.entity.RepositoryWithOwner>,
+    private val onStarClickListener: (com.stefanenko.gitphone.domain.entity.RepositoryWithOwner) -> Unit
 ) : RecyclerView.Adapter<SavedRepositoryViewHolder>() {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): SavedRepositoryViewHolder {
@@ -24,7 +24,7 @@ class AdapterSavedRepositoryList(
 
     override fun getItemCount(): Int = itemList.size
 
-    fun onDataSetChanged(nItemList: List<RepositoryWithOwner>) {
+    fun onDataSetChanged(nItemList: List<com.stefanenko.gitphone.domain.entity.RepositoryWithOwner>) {
         val diffUtilResult = DiffUtil.calculateDiff(DiffUtilSavedRepoCallBack(itemList, nItemList))
         itemList = nItemList
         diffUtilResult.dispatchUpdatesTo(this)

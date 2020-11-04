@@ -1,12 +1,10 @@
 package com.stefanenko.gitphone.ui.fragment.savedRepositories
 
 import android.util.Log
-import android.view.View
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.stefanenko.gitphone.R
-import com.stefanenko.gitphone.domain.entity.RepositoryWithOwner
 import com.stefanenko.gitphone.ui.ViewModelFactory
 import com.stefanenko.gitphone.ui.base.BaseObserveFragment
 import com.stefanenko.gitphone.ui.base.decorators.VerticalItemDecoration
@@ -75,7 +73,7 @@ class SavedRepositoriesFragment : BaseObserveFragment() {
         })
     }
 
-    private fun initRecycler(itemList: List<RepositoryWithOwner>) {
+    private fun initRecycler(itemList: List<com.stefanenko.gitphone.domain.entity.RepositoryWithOwner>) {
         recyclerSavedRepo = savedRepoRecycler.apply {
             layoutManager = LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false)
             addItemDecoration(VerticalItemDecoration(16.toDp()))

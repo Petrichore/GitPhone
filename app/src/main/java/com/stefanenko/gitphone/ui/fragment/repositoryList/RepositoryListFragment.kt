@@ -1,22 +1,18 @@
 package com.stefanenko.gitphone.ui.fragment.repositoryList
 
-import android.app.AlertDialog
-import android.content.DialogInterface
+
 import android.os.Bundle
 import android.view.View
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.bumptech.glide.Glide
 import com.stefanenko.gitphone.R
-import com.stefanenko.gitphone.domain.entity.RepositoryLocal
-import com.stefanenko.gitphone.domain.entity.RepositoryOwner
 import com.stefanenko.gitphone.ui.ViewModelFactory
 import com.stefanenko.gitphone.ui.base.BaseObserveFragment
 import com.stefanenko.gitphone.ui.base.decorators.VerticalItemDecoration
 import com.stefanenko.gitphone.ui.fragment.repositoryList.recycler.AdapterRepositoryList
 import com.stefanenko.gitphone.util.toDp
 import kotlinx.android.synthetic.main.fragment_repositories.*
-import kotlinx.android.synthetic.main.item_repository.*
 import javax.inject.Inject
 
 class RepositoryListFragment : BaseObserveFragment() {
@@ -66,14 +62,14 @@ class RepositoryListFragment : BaseObserveFragment() {
         })
     }
 
-    private fun setUiData(repositoryOwner: RepositoryOwner) {
+    private fun setUiData(repositoryOwner: com.stefanenko.gitphone.domain.entity.RepositoryOwner) {
         ownerNameText.text = repositoryOwner.name
         Glide.with(requireContext()).load(repositoryOwner.imageUrl).into(ownerImageView)
 
         initRecycler(repositoryOwner.repositoryList)
     }
 
-    private fun initRecycler(itemList: List<RepositoryLocal>) {
+    private fun initRecycler(itemList: List<com.stefanenko.gitphone.domain.entity.RepositoryLocal>) {
         with(repositoryRecycler) {
             layoutManager = LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false)
             adapter = AdapterRepositoryList(itemList) {

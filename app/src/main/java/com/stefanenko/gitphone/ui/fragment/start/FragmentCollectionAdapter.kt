@@ -4,7 +4,6 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
 import androidx.lifecycle.Lifecycle
 import androidx.viewpager2.adapter.FragmentStateAdapter
-import com.stefanenko.gitphone.ui.base.BaseFragment
 import com.stefanenko.gitphone.ui.fragment.savedRepositories.SavedRepositoriesFragment
 import com.stefanenko.gitphone.ui.fragment.enterToRepository.GitUsernameFragment
 import java.lang.Exception

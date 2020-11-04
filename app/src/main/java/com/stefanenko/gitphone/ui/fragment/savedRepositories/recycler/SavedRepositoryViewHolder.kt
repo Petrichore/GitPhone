@@ -15,14 +15,14 @@ import kotlinx.android.synthetic.main.item_saved_repository.view.*
 
 class SavedRepositoryViewHolder(
     private val view: View,
-    private val onStarClickListener: (RepositoryWithOwner) -> Unit
+    private val onStarClickListener: (com.stefanenko.gitphone.domain.entity.RepositoryWithOwner) -> Unit
 ) : RecyclerView.ViewHolder(view) {
 
     private val repositoryName = view.repositoryNameText
     private val projectLanguage = view.languageText
     private val projectDescription = view.descriptionText
 
-    fun bind(item: RepositoryWithOwner) {
+    fun bind(item: com.stefanenko.gitphone.domain.entity.RepositoryWithOwner) {
 
         with(item) {
             repositoryName.text = repoName
